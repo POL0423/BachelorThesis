@@ -5,7 +5,7 @@
 \usepackage[backend=biber, style=iso-numeric, alldates=iso]{biblatex} % bibliografie
 \usepackage{dcolumn} % sloupce tabulky s ciselnymi hodnotami
 \usepackage{subfig} % makra pro "podobrazky" a "podtabulky"
-\usepackage[cpp,java,html]{diplomalst}
+\usepackage[sql,php,html,js,ts,css]{diplomalst}
 
 % Zadame pozadovane vstupy pro generovani titulnich stran.
 \ThesisAuthor{Marek Poláček}
@@ -16,28 +16,34 @@
 
 \EnglishThesisTitle{Web Application for Fuel Prices Comparison}
 
-\SubmissionYear{2023}
+\SubmissionYear{2025}
 
-\ThesisAssignmentFileName{FictiveThesisAssignment.pdf}
+\ThesisAssignmentFileName{ThesisSpecification_POL0423_vsboee24030DA7.pdf}
 
 % Pokud nechceme nikomu dekovat makro zapoznamkujeme.
 \Acknowledgement{Rád bych na tomto místě poděkoval všem, kteří mi s prací pomohli, protože bez nich by tato práce nevznikla.}
 
-\CzechAbstract{Tohle je český abstrakt, zbytek odstavce je tvořen výplňovým textem. Naší si rozmachu potřebami s posílat v poskytnout ty má plot. Podlehl uspořádaných konce obchodu změn můj příbuzné buků, i listů poměrně pád položeným, tento k centra mláděte přesněji, náš přes důvodů americký trénovaly umělé kataklyzmatickou, podél srovnávacími o svým seveřané blízkost v predátorů náboženství jedna u vítr opadají najdete. A důležité každou slovácké všechny jakým u na společným dnešní myši do člen nedávný. Zjistí hází vymíráním výborná.}
+\CzechAbstract{
+    Ve světě plném informací téměř na dosah ruky je potřeba se správně orientovat. V několika případech je nutné provést určitou formu porovnání různých vstupů stejného typu, a nejdůležitější je především porovnávání cen různých výrobků. V České republice stále roste množství automobilů, stále více a více lidí je držitelem řidičského oprávnění, a samozřejmě s rostoucím počtem automobilů roste také poptávka na pohonné hmoty. Lidé tak mají především zájem o co nejlevnější benzín či naftu. Aplikace pro porovnávání cen ulehčuje průzkum cenových hladin různých výrobků, a výjimkou nejsou právě ani pohonné hmoty na čerpacích stanicích.
+}
 
 \CzechKeywords{aplikace; pohonné hmoty; srovnávač cen; \LaTeX; bakalářská práce}
 
-\EnglishAbstract{This is English abstract. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Fusce tellus odio, dapibus id fermentum quis, suscipit id erat. Aenean placerat. Vivamus ac leo pretium faucibus. Duis risus. Fusce consectetuer risus a nunc. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. Aliquam erat volutpat. Donec vitae arcu. Nullam lectus justo, vulputate eget mollis sed, tempor sed magna. Curabitur ligula sapien, pulvinar a vestibulum quis, facilisis vel sapien. Vestibulum fermentum tortor id mi. Etiam bibendum elit eget erat. Pellentesque pretium lectus id turpis. Nulla quis diam.}
+\EnglishAbstract{
+    In the world full of informations almost at the tip of our hands, we need to properly orient ourselves in the sea of different stuff. In number of cases, we need to perform comparisons of various inputs of the same type, and the most important one is mainly comparing prices of different products. In Czech Republic, there's more and more motorized vehicles driving in the streets, more and more people own a driver's license, and of course with growing number of cars, there's also a growing interest in the fuel. People naturally have interest in as cheapest fuel as possible. An application for prices comparison makes it easy for you to inform yourself about prices of different products, and fuel you can get at petrol stations is no exception to that.
+}
 
-\EnglishKeywords{app; fuel; price comparison; \LaTeX; bachelor thesis}
+\EnglishKeywords{application; fuel; price comparison; \LaTeX; bachelor thesis}
 
-\AddAcronym{DVD}{Digital Versatile Disc}
-\AddAcronym{TNT}{Trinitrotoluen}
-\AddAcronym{UML}{Unified Modeling Language}
+\AddAcronym{PHM}{Pohonné hmoty}
+\AddAcronym{GPS}{Global Positioning System}
 \AddAcronym{HTML}{Hyper Text Markup Language}
-\AddAcronym{TUG}{\TeX{} Users Group}
+\AddAcronym{CSS}{Cascade Style Sheet}
+\AddAcronym{SQL}{Structured Query Language}
+\AddAcronym{PHP}{Hyper Text Preprocessor}
 
 \addbibresource{biblatex-examples.bib}
+\addbibresource{resources.bib}      % Jediné skutečné knižní prameny
 \addbibresource{coffee.bib}
 
 % Novy druh tabulkoveho sloupce, ve kterem jsou cisla zarovnana podle desetinne carky
@@ -62,9 +68,10 @@
 
 % A nasleduje text zaverecne prace.
 \input{Chapters/Introduction.tex}
-\input{Chapters/SampleChapter1.tex}
-\input{Chapters/SampleChapter2.tex}
+\input{Chapters/InitialResearch.tex}
+\input{Chapters/SimilarApplications.tex}
 \input{Chapters/TechnicalDetails.tex}
+\input{Chapters/ApplicationFunction.tex}
 \input{Chapters/Conclusion.tex}
 
 % Seznam literatury
@@ -76,7 +83,7 @@
 \input{Chapters/Appendix2.tex}
 
 % Priloha vlozena primo do hlavniho LaTeX souboru. Ne vsechny prilohy je nutne mit ve zvlastnich souborech.
-\chapter{Dlouhý zdrojový kód}
-\lstinputlisting[label=src:CppExternal,caption={Dlouhý zdrojový kód v jazyce C++ načtený s externího souboru}]{SourceCodes/ArraySortingAlgorithms.cpp}
+%\chapter{Dlouhý zdrojový kód}
+%\lstinputlisting[label=src:CppExternal,caption={Dlouhý zdrojový kód v jazyce C++ načtený s externího souboru}]{SourceCodes/ArraySortingAlgorithms.cpp}
 
 \end{document}

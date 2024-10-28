@@ -12,6 +12,8 @@
 %% This work is licensed under CC BY-NC-ND 3.0 CZ, https://creativecommons.org/licenses/by-nc-nd/3.0/cz/deed.en
 %% You may distribute it and use it for non-commercial purposes, but the author must be mentioned and the document can not be changed.
 %% 
+%% File modified for necessary web language support for listing.
+%% 
 \def\fileversion{1.0}
 \def\filedate{2021/03/06}
 \def\docdate{6. března 2021}
@@ -19,6 +21,11 @@
 \ProvidesPackage{diplomalst}[\filedate\space \fileversion\space diplomalst package]
 \RequirePackage[final]{listings}
 \RequirePackage{xcolor}
+
+% Import "diplomalst_web.sty" (definice webových jazyků)
+\input{diplomalst_web.sty}
+
+% Options declaration
 \lstset{language=[Sharp]C}
 \DeclareOption{ansic}{\lstset{language=[ANSI]C}}
 \DeclareOption{bash}{\lstset{language=bash}}
@@ -51,6 +58,9 @@
 \DeclareOption{vhdl}{\lstset{language=VHDL}}
 \DeclareOption{xml}{\lstset{language=XML}}
 \DeclareOption{xslt}{\lstset{language=XSLT}}
+\DeclareOption{js}{\lstset{language=JavaScript}}
+\DeclareOption{ts}{\lstset{language=TypeScript}}
+\DeclareOption{css}{\lstset{language=CSS}}
 \ProcessOptions
 \lstset
 {

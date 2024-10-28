@@ -1,0 +1,29 @@
+====================================================
+Sbírka odkazů na literaturu, informace.
+====================================================
+
+Témata
+----------------------------------------------------
+1. Web scraping
+2. API endpointy
+3. HTML/CSS
+4. JavaScript, jQuery
+5. React, ReactNative
+6. Electron App
+----------------------------------------------------
+
+Knižní, žurnalistické a webové zdroje
+----------------------------------------------------
+1. Web scraping [pomůže i Wikipedie při výběru literatury]
+   - [...]
+2. API endpointy [především webové zdroje]
+   - [...]
+3. HTML/CSS [webové zdroje i knižní prameny]
+   - [...]
+4. JavaScript, jQuery [webové zdroje i knižní prameny]
+   - [...]
+5. React, ReactNative [především webové zdroje, najít i knihy]
+   - [...]
+6. Electro App [webová dokumentace]
+   - [...]
+----------------------------------------------------
