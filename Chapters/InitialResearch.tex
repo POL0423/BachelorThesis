@@ -1,6 +1,30 @@
 \chapter{Počáteční průzkum}
 \section{Popis problému}
-% Popis problému, který se snažím vyřešit
+
+Webovou aplikaci porovnávače cen tvoří několik dílčích součástí.
+Zřejmě nejdůležitějšími součástmi jsou:
+\begin{itemize}
+    \item web crawler, který vyhledává
+        weby na základě zadaných parametrů a klíčových slov
+        definující obchody,
+    \item algoritmus pro čtení webových stránek a interpretaci
+        obsahu do strukturovaných dat určených k dalšímu zpracování,
+    \item cache, která uchovává přechodná data, čímž šetří výpočetní
+        výkon serveru
+    \item a hosting samotné webové aplikace a API endpointu
+        pro zobrazení dat a jejich prezentaci koncovému uživateli.
+\end{itemize}
+
+Další volitelné součásti mohou být:
+\begin{itemize}
+    \item mapové podklady s API pro práci s polohovými údaji
+        a jejich propojení se získanými daty
+    \item a databáze pro uchovávání historických dat, případně
+        uživatelských dat (preference apod.)
+\end{itemize}
+
+Pro mé účely porovnávače cen PHM jsem se rozhodl využít kromě
+nejdůležitějších součástí také mapové podklady a databázi.
 
 \section{Procházení webu a dolování dat}
 % Problematika týkající se dolování dat z webů čerpacích stanic
