@@ -375,7 +375,7 @@ Vyvíjené součásti aplikace jsou:
         \texttt{\url{https://github.com/POL0423/petrolscan-docker-compose}}
 \end{itemize}
 
-\subsection{Výběr softwaru}
+\subsection{Výběr softwaru pro crawler}
 
 Jako první jsem se rozhodl najít vhodné self-hosted webové crawlery
 a scrapery. Na dotaz k vyhledávání mi ChatGPT našlo následující možnosti:
@@ -386,10 +386,16 @@ a scrapery. Na dotaz k vyhledávání mi ChatGPT našlo následující možnosti
     \item EasySpider
 \end{itemize}
 
-\subsubsection{Crawlee}
+Rozhodl jsem se pro Crawlee.
+
+\subsubsection{Zkouška Crawlee}
 
 Tento crawler funguje v Node.js, a nabízí jednoduchou instalaci pomocí
-jednoduchého příkazu. Zkušební test ukázkového crawleru proběhl v pořádku.
+jednoduchého příkazu. Crawler simuluje procházení webu člověkem pomocí
+bezhlavičkových webových prohlížečů, které jsou schopné také interpretovat
+Javascriptový kód.
+
+Zkušební test ukázkového crawleru proběhl v pořádku.
 První pokus o spuštění neuspěl, neboť chyběly Playwright bezhlavičkové
 prohlížeče. Po instalaci těchto prohlížečů se již crawler spustil.
 
@@ -539,17 +545,122 @@ soubor \texttt{Dockerfile}, pro crawler tak lze rovnou vytvořit
 Docker image, který se jen posléze nahraje na Docker Hub a lze s ním
 dále pracovat.
 
-\subsubsection{Scrapy}
+\subsubsection{Tvorba crawleru}
 
-% TODO: Projít Scrapy a k tomu přidruženou dokumentaci.
+Nejprve je nutné prozkoumat webové stránky různých čerpacích stanic.
+Uvažujme tak tyto čerpací stanice:
 
-\subsubsection{EasySpider}
+\begin{itemize}
+    \item Globus
+    \item Orlen
+    \item Shell
+    \item EuroOil
+    \item ONO
+    \item MOL
+    \item OMV
+    \item Prim
+\end{itemize}
 
-% TODO: Projít EasySpider a k tomu přidruženou dokumentaci.
+Pro všechny tyto ČS tak je nutné prozkoumat a analyzovat jejich webové
+stránky, abychom mohli z daných webových stránek vytáhnout příslušná data.
+Začíná mravenčí práce, a sice prozkoumávání a analýza skladby jednotlivých
+webových stránek ČS, zápis struktury každého webu a sestavení jednotlivých
+šablon pro náš crawler tak, aby byl crawler schopen stránky procházet
+a získávat daný obsah. Crawler tato data bude tahat a zaznamenávat
+do databáze strukturovaně podle typu jednotlivých PHM, jejich značce
+a umístění ČS.
 
-\subsubsection{Konečný verdikt}
+\subsubsection{Globus}
 
-% TODO: Vybrat vhodný software
+Tato ČS patří velkoobchodnímu řetězci (hypermarketu) stejného jména
+a nachází se výhradně vždy v blízkosti prodejny. Globus lze v době
+psaní této bakalářské práce najít jen v 16 různých městech a městských
+částí v ČR:
+
+\begin{itemize}
+    \item Brno
+    \item České Budějovice
+    \item Chomutov
+    \item Havířov
+    \item Karlovy Vary ‒ Jenišov
+    \item Liberec
+    \item Olomouc
+    \item Opava
+    \item Ostrava
+    \item Pardubice
+    \item Plzeň ‒ Chotíkov
+    \item Praha
+    \begin{itemize}
+        \item Čakovice
+        \item Černý Most
+        \item Štěrboholy
+        \item Zličín
+    \end{itemize}
+    \item Trmice
+\end{itemize}
+
+Postup pro získání informací o cenách PHM z ČS je následující.
+
+\begin{enumerate}
+    \item Na webové stránce www.globus.cz klikneme na tlačítko s ikonou
+        špendlíku. Pokud se nás web zeptá na výběr prodejny, zvolíme
+        dle požadavků (například Ostravu). Pokud je zvolená prodejna
+        nesprávná, lze výběr změnit kliknutím na tlačítko „Změnit“
+        v prvním sloupci pop-up okénka.
+    \item Požadované informace z této ČS jsou ve třetím sloupci (viz
+        screenshot na obrázku \ref{fig:globus-cs})
+\end{enumerate}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{Figures/globus_vyber.jpg}
+    \caption{Základní informace o prodejně Globus, včetně cen PHM
+        přidružené ČS}
+    \label{fig:globus-cs}
+\end{figure}
+
+Tento postup je potřeba automatizovat. K tomu nám právě poslouží již
+zmíněný crawler. Každá ČS má jinou strukturu webu, a proto je potřeba
+vytvořit pro každý web jeho vlastní crawler. K tomu lze využít threading
+v Node.js. Například pro ČS Globus vypadá technický automatizovaný postup
+následovně:
+
+\begin{enumerate}
+    \item Crawler načte webovou stránku www.globus.cz
+    \item (...) % TODO: Postup výběru prodejny a extrakce dat z ČS
+\end{enumerate}
+
+\subsubsection{Orlen}
+
+% TODO: Umístění a struktura webu
+
+\subsubsection{Shell}
+
+% TODO: Umístění a struktura webu
+
+\subsubsection{EuroOil}
+
+% TODO: Umístění a struktura webu
+
+\subsubsection{ONO}
+
+% TODO: Umístění a struktura webu
+
+\subsubsection{MOL}
+
+% TODO: Umístění a struktura webu
+
+\subsubsection{OMV}
+
+% TODO: Umístění a struktura webu
+
+\subsubsection{Prim}
+
+% TODO: Umístění a struktura webu
+
+\subsubsection{Threading a strukturizace crawleru}
+
+% TODO: Postup tvorby crawleru
 
 \subsection{Databáze}
 
