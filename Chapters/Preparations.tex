@@ -36,13 +36,6 @@ VMware Tools jsem se rozhodl využít místo toho otevřený balíček
 také nainstaloval balíček \texttt{nano}, který poskytuje jednoduchý
 textový editor přímo v příkazovém řádku.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.75\linewidth]{Figures/vmware_console.png}
-    \caption{Konzole virtuálního serveru ve VMware Workstation Pro}
-    \label{fig:vmware-workstation-pro}
-\end{figure}
-
 Dalším krokem je nastavení IPv6 sítě. Jelikož IPv6 adresa není
 DHCP serverem přidělena, je potřeba adresu nastavit ručně. Pro to
 využijeme výše zmíněný DNS záznam pro IPv6 vazbu. Tento proces
@@ -139,7 +132,7 @@ importovány v souboru\\
 \texttt{/etc/ssh/sshd\_config}, který obsahuje konfiguraci SSH Daemon
 serveru.
 
-Následně stačilo restartovat službu SSH daemon:
+Následně stačilo restartovat službu SSH Daemon:
 
 \begin{verbatim}
 # systemctl restart sshd.service
@@ -551,11 +544,11 @@ Nejprve je nutné prozkoumat webové stránky různých čerpacích stanic.
 Uvažujme tak tyto čerpací stanice:
 
 \begin{itemize}
-    \item Globus
+    \item \textbf{Globus}
     \item Orlen
     \item Shell
     \item EuroOil
-    \item ONO
+    \item \textbf{ONO}
     \item MOL
     \item OMV
     \item Prim
@@ -608,16 +601,9 @@ Postup pro získání informací o cenách PHM z ČS je následující.
         nesprávná, lze výběr změnit kliknutím na tlačítko „Změnit“
         v prvním sloupci pop-up okénka.
     \item Požadované informace z této ČS jsou ve třetím sloupci (viz
-        screenshot na obrázku \ref{fig:globus-cs})
+        screenshot na obrázku \ref{fig:globus-cs} na stránce
+        \pageref{fig:globus-cs})
 \end{enumerate}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.75\linewidth]{Figures/globus_vyber.jpg}
-    \caption{Základní informace o prodejně Globus, včetně cen PHM
-        přidružené ČS}
-    \label{fig:globus-cs}
-\end{figure}
 
 Tento postup je potřeba automatizovat. K tomu nám právě poslouží již
 zmíněný crawler. Každá ČS má jinou strukturu webu, a proto je potřeba
@@ -627,36 +613,117 @@ následovně:
 
 \begin{enumerate}
     \item Crawler načte webovou stránku www.globus.cz
-    \item (...) % TODO: Postup výběru prodejny a extrakce dat z ČS
+    \item Je-li zobrazeno upozornění na cookies, odklikne se souhlas.
+        Toto tlačítko je popsáno následujícím CSS selektorem:
+
+        \texttt{
+            div\#CybotCookiebotDialog >
+            div.CybotCookiebotDialogContentWrapper >
+            div\#CybotCookiebotDialogFooter > 
+            div.CybotCookiebotScrollArea >
+            div\#CbotCookiebotDialogBodyButtons >
+            div\#CybotCookiebotDialogBodyButtonsWrapper >
+            button#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll
+        }
+
+    \item Klikneme na tlačítko \texttt{Vybrat pobočku}. To je popsáno
+        následujícím CSS selektorem:
+
+        \texttt{
+            div\#\_\_nuxt > div\#layout-default > header\#header >
+            div.container > div.items-center > div.flex-auto >
+            div.flex > button.btn-lg
+        }
+
+    \item Jednotlivé pobočky zkopírujeme do seznamu, ze kterého poté
+        čerpáme. Prvky v tomto seznamu jsou popsány následujícími CSS
+        selektory:
+
+        \texttt{
+            /* Seznam */\\
+            \#input\_9 > ul
+        }
+
+        \texttt{
+            /* Položka [i] = 1 .. n; // n = 16 */\\
+            \#input\_9 > ul > li:nth-child(i)
+        }
+
+    \item Klikneme postupně na všechny prodejny v seznamu. Prvek
+        formuláře je popsán následujícím CSS selektorem:
+
+        \texttt{
+            div\#teleport-target > div.items-end > div.items-end >
+            div.flex-col > div.overscroll-contain > div.max-h-full >
+            div.formkit-outer > fieldset\#input_9 > ul.formkit-options >
+            li.grid > label.formkit-wrapper > span.formkit-inner >
+            input.formkit-input
+        }
+
+    \item Počkáme, než se načtou informace (asi 1 s).
+    \item Zkopírujeme informace o stanici a palivech (název, cena).
+        Tyto informace jsou popsány následujícími CSS selektory:
+
+        \texttt{
+            /* Název stanice */\\
+            \#teleport-target > div > div > div >
+            div.shrink-1.grow-0.max-h-full.min-h-0.overflow-y-auto.overflow-auto.overscroll-contain >
+            div > section > div.flex.items-center.gap-x-4 > h2 >
+            span.text-sm.lg\textbackslash :text-base
+        }
+
+        \texttt{
+            /* Název paliva */\\
+            div#teleport-target > div.items-end > div.items-end >
+            div.flex-col > div.overscroll-contain > div.max-h-full >
+            div.lg\textbackslash :pl-6 > section.space-y-2 > table.w-full >
+            tbody > tr > th.text-left
+        }
+
+        \texttt{
+            /* Cena paliva */\\
+            div\#teleport-target > div.items-end > div.items-end >
+            div.flex-col > div.overscroll-contain > div.max-h-full >
+            div.lg\textbackslash :pl-6 > section.space-y-2 > table.w-full >
+            tbody > tr > td.text-right
+        }
+
+    \item Klikneme na tlačítko \texttt{Zmenit} pro výběr další pobočky.
+        Toto tlačítko je popsáno následujícím CSS selektorem:
+
+        \texttt{
+            \#teleport-target > div > div > div >
+            div.shrink-1.grow-0.max-h-full.min-h-0.overflow-y-auto.overflow-auto.overscroll-contain >
+            div > section > div.flex.items-center.gap-x-4 > button
+        }
+        
+    \item Opakujeme od bodu 5, dokud neprojdeme všechny prodejny.
 \end{enumerate}
-
-\subsubsection{Orlen}
-
-% TODO: Umístění a struktura webu
-
-\subsubsection{Shell}
-
-% TODO: Umístění a struktura webu
-
-\subsubsection{EuroOil}
-
-% TODO: Umístění a struktura webu
 
 \subsubsection{ONO}
 
 % TODO: Umístění a struktura webu
 
-\subsubsection{MOL}
+\subsubsection{Vyřazené čerpací stanice}
 
-% TODO: Umístění a struktura webu
+Během analýzy zmíněných webů ČS jsem zjistil, že právě pouze Globus
+a ONO poskytují ceny PHM. Následující weby řetězců ČS jsem musel
+z projektu vyřadit, neboť nesplňují požadavky k dolování dat.
 
-\subsubsection{OMV}
-
-% TODO: Umístění a struktura webu
-
-\subsubsection{Prim}
-
-% TODO: Umístění a struktura webu
+\begin{itemize}
+    \item \textbf{OMV:} Tato síť ČS poskytuje ceny PHM ve formátu,
+        který vyžaduje použití OCR čtečky, jejíž implementace
+        by byla velmi náročná, a časově by nebylo reálné čtečku
+        do projektu zakomponovat.
+    \item \textbf{Orlen:} Webové stránky této ČS využívají REST API,
+        což je vysoké plus. Ale to samo o sobě nestačí. Pokud ani
+        v API, ani na webové stránce nejsou k dispozici ceny PHM,
+        jen slevy na tankovací kartu či aplikaci této sítě, nelze
+        tato data v porovnání cen PHM použít.
+    \item \textbf{Shell, EuroOil, MOL a Prim:} Tyto ČS informace
+        o cenách PHM na svých webových stránkách vůbec neposkytují,
+        čímž nelze data z těchto webových stránek použít.
+\end{itemize}
 
 \subsubsection{Threading a strukturizace crawleru}
 
