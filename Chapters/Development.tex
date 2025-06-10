@@ -1,0 +1,55 @@
+\chapter{Vývoj aplikace}
+
+Samotná implementace celé aplikace je rozdělena na několik částí.
+
+\begin{itemize}
+    \item \textbf{Crawler:} Sbírá data a zapisuje je do relační databáze.
+        Využit je software \emph{Crawlee} s knihovnou \emph{Playwright Chromium}.
+        K geolokaci jednotlivých stanic je použit API mapového poskytovatele OSM.
+    \item \textbf{Frontend:} Čte data z databáze, filtruje na základě
+        uživatelského vstupu geolokace a zvoleného okruhu a filtrovaná
+        data následně porovnává a řadí ve výchozím nastavení od nejlevnějších
+        po nejdražší. Využit je framework \emph{Next.js} s použitím API
+        mapového poskytovatele OSM.
+    \item \textbf{Databáze:} Uchovává nasbíraná data z crawleru a poskytuje je
+        frontendu k uživatelskému zpracování. Využit je software \emph{Oracle MySQL}.
+    \item \textbf{Reverse proxy:} Zprostředkovává přístup k frontendu z webového
+        prohlížeče uživatele a zajišťuje kryptografické šifrování komunikace
+        mezi prohlížečem a serverem. Využit je software \emph{Nginx}.
+\end{itemize}
+
+\section{Crawler}
+
+Implementace crawleru je řešena pomocí \emph{Node.js}, který poskytuje funkční
+rozhraní pro spouštění aplikace, s využitím knihoven \emph{Crawlee},
+\emph{Playwright} a \emph{MySQL}, které poskytují rozhraní nutné k procházení
+webů a zapisování do databáze. Nejdůležitější součástí crawleru jsou dílčí
+moduly, které implementují procházení webů. Technický postup automatizace
+tohoto procházení a čtení dat je popsán v následujících podsekcích.
+
+\subsection{Procházení Globusu}
+
+\begin{enumerate}
+    \item Po načtení webové stránky se crawler snaží identifikovat tlačítko
+        souhlasu s využitím cookies. Tlačítko souhlasu je popsáno CSS selektorem\\
+        \texttt{button\#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll}.
+        Pokud není toto tlačítko nalezeno, procedura se přeskočí.
+    \item Nyní je třeba zjistit seznam jednotlivých poboček kliknutím na tlačítko
+        \emph{Vybrat pobočku}. Toto tlačítko se nachází v hlavičce stránky,
+        popsáno je CSS selektorem \texttt{div\#\_\_nuxt header\#header button.btn-lg}.
+    \item [...]
+\end{enumerate}
+
+\subsection{Procházení ČS ONO}
+
+[...]
+
+\section{Frontend}
+
+[...]
+
+\section{Ostatní součásti a jejich propojení}
+
+[...]
+
+\endinput

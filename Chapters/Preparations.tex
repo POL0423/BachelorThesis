@@ -552,6 +552,7 @@ Uvažujme tak tyto čerpací stanice:
     \item MOL
     \item OMV
     \item Prim
+    \item Makro
 \end{itemize}
 
 Pro všechny tyto ČS tak je nutné prozkoumat a analyzovat jejich webové
@@ -559,7 +560,7 @@ stránky, abychom mohli z daných webových stránek vytáhnout příslušná da
 Začíná mravenčí práce, a sice prozkoumávání a analýza skladby jednotlivých
 webových stránek ČS, zápis struktury každého webu a sestavení jednotlivých
 šablon pro náš crawler tak, aby byl crawler schopen stránky procházet
-a získávat daný obsah. Crawler tato data bude tahat a zaznamenávat
+a získávat daný obsah. Crawler tato data z webových stránek čte a zaznamenává
 do databáze strukturovaně podle typu jednotlivých PHM, jejich značce
 a umístění ČS.
 
@@ -595,114 +596,74 @@ psaní této bakalářské práce najít jen v 16 různých městech a městský
 Postup pro získání informací o cenách PHM z ČS je následující.
 
 \begin{enumerate}
-    \item Na webové stránce www.globus.cz klikneme na tlačítko s ikonou
+    \item Na webové stránce \url{www.globus.cz} klikneme na tlačítko s ikonou
         špendlíku. Pokud se nás web zeptá na výběr prodejny, zvolíme
         dle požadavků (například Ostravu). Pokud je zvolená prodejna
         nesprávná, lze výběr změnit kliknutím na tlačítko „Změnit“
         v prvním sloupci pop-up okénka.
     \item Požadované informace z této ČS jsou ve třetím sloupci (viz
         screenshot na obrázku \ref{fig:globus-cs} na stránce
-        \pageref{fig:globus-cs})
+        \pageref{fig:globus-cs}).
 \end{enumerate}
 
 Tento postup je potřeba automatizovat. K tomu nám právě poslouží již
 zmíněný crawler. Každá ČS má jinou strukturu webu, a proto je potřeba
 vytvořit pro každý web jeho vlastní crawler. K tomu lze využít threading
-v Node.js. Například pro ČS Globus vypadá technický automatizovaný postup
-následovně:
-
-\begin{enumerate}
-    \item Crawler načte webovou stránku www.globus.cz
-    \item Je-li zobrazeno upozornění na cookies, odklikne se souhlas.
-        Toto tlačítko je popsáno následujícím CSS selektorem:
-
-        \texttt{
-            div\#CybotCookiebotDialog >
-            div.CybotCookiebotDialogContentWrapper >
-            div\#CybotCookiebotDialogFooter > 
-            div.CybotCookiebotScrollArea >
-            div\#CybotCookiebotDialogBodyButtons >
-            div\#CybotCookiebotDialogBodyButtonsWrapper >
-            button\#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll
-        }
-
-    \item Klikneme na tlačítko \texttt{Vybrat pobočku}. To je popsáno
-        následujícím CSS selektorem:
-
-        \texttt{
-            div\#\_\_nuxt > div\#layout-default > header\#header >
-            div.container > div.items-center > div.flex-auto >
-            div.flex > button.btn-lg
-        }
-
-    \item Jednotlivé pobočky zkopírujeme do seznamu, ze kterého poté
-        čerpáme. Prvky v tomto seznamu jsou popsány následujícími CSS
-        selektory:
-
-        \texttt{
-            /* Seznam */\\
-            \#input\_9 > ul
-        }
-
-        \texttt{
-            /* Položka [i] = 1 .. n; // n = 16 */\\
-            \#input\_9 > ul > li:nth-child(i)
-        }
-
-    \item Klikneme postupně na všechny prodejny v seznamu. Prvek
-        formuláře je popsán následujícím CSS selektorem:
-
-        \texttt{
-            div\#teleport-target > div.items-end > div.items-end >
-            div.flex-col > div.overscroll-contain > div.max-h-full >
-            div.formkit-outer > fieldset\#input\_9 > ul.formkit-options >
-            li.grid > label.formkit-wrapper > span.formkit-inner >
-            input.formkit-input
-        }
-
-    \item Počkáme, než se načtou informace (asi 1 s).
-    \item Zkopírujeme informace o stanici a palivech (název, cena).
-        Tyto informace jsou popsány následujícími CSS selektory:
-
-        \texttt{
-            /* Název stanice */\\
-            \#teleport-target > div > div > div >
-            div.shrink-1.grow-0.max-h-full.min-h-0.overflow-y-auto.overflow-auto.overscroll-contain >
-            div > section > div.flex.items-center.gap-x-4 > h2 >
-            span.text-sm.lg\textbackslash :text-base
-        }
-
-        \texttt{
-            /* Název paliva */\\
-            div\#teleport-target > div.items-end > div.items-end >
-            div.flex-col > div.overscroll-contain > div.max-h-full >
-            div.lg\textbackslash :pl-6 > section.space-y-2 > table.w-full >
-            tbody > tr > th.text-left
-        }
-
-        \texttt{
-            /* Cena paliva */\\
-            div\#teleport-target > div.items-end > div.items-end >
-            div.flex-col > div.overscroll-contain > div.max-h-full >
-            div.lg\textbackslash :pl-6 > section.space-y-2 > table.w-full >
-            tbody > tr > td.text-right
-        }
-
-    \item Klikneme na tlačítko \texttt{Zmenit} pro výběr další pobočky.
-        Toto tlačítko je popsáno následujícím CSS selektorem:
-
-        \texttt{
-            \#teleport-target > div > div > div >
-            div.shrink-1.grow-0.max-h-full.min-h-0.overflow-y-auto.overflow-auto.overscroll-contain >
-            div > section > div.flex.items-center.gap-x-4 > button
-        }
-        
-    \item Opakujeme od bodu 5, dokud neprojdeme všechny prodejny.
-\end{enumerate}
+v Node.js.
 
 \subsubsection{ONO}
 
-% TODO: Umístění a struktura webu
+ČS ONO jsou v samostatné síti ČS provozované společností Tank ONO s.r.o.
+Web se nachází na adrese \url{www.tank-ono.cz}, který je velmi jednoduchý
+a přehledný. Postup k získání informací z ČS je následující:
+
+\begin{enumerate}
+    \item Načteme hlavní webovou stránku \url{www.tank-ono.cz}. Zobrazí
+        se nám mapa s jednotlivými pobočkami sítě ČS ONO. Na této webové
+        stránce se nachází celkem 43 stanic. Jejich mapu lze vidět
+        na obrázku \ref{fig:tank-ono-mapa} na stránce
+        \pageref{fig:tank-ono-mapa}. V tabulce \ref{tab:tank-ono-pobocky}
+        na stránce \pageref{tab:tank-ono-pobocky} lze vidět jejich výčet.
+    \item Kliknutím na jednu z položek v seznamu nebo kliknutím na pozici
+        na mapě si lze zobrazit detail konkrétní ČS. Na obrázku
+        \ref{fig:tank-ono-stranka} na stránce \pageref{fig:tank-ono-stranka}
+        lze vidět strukturu webové stránky detailu ČS. Vlevo nahoře (a) je název
+        a umístění ČS, zatímco vpravo dole je vidět tabulka PHM (b) včetně jejich
+        cen v Kč (c) a eurech. Toto jsou data, která nás zajímají.
+\end{enumerate}
+
+\newpage
+
+\begin{table}[]
+    \centering
+    \caption{Seznam ČS ONO}
+    \label{tab:tank-ono-pobocky}
+    \begin{tabular}{r l|r l}
+        1.    & ČS Plzeň, Domažlická        & 24.   & ČS Sukorady u Mladé Boleslavi\\
+        2.    & ČS Nýřany                   & 25.   & ČS Podolí u Písku\\
+        3.    & ČS Plzeň, Studentská        & 26.   & ČS Planá nad Lužnicí\\
+        4.    & ČS Sokolov                  & 27.   & ČS Spytihněv\\
+        5.    & ČS Teplice                  & 28.   & ČS Mošnov\\
+        6.    & ČS Cheb                     & 29.   & ČS Kojetice-Tůmovka\\
+        7.    & ČS Milovice u Hořic         & 30.   & ČS Cvikov\\
+        8.    & ČS Chlumec                  & 31.   & ČS Chomutov - Přečaply\\
+        9.    & ČS Jihlava                  & 32.   & ČS Zádveřice u Zlína\\
+        10.   & ČS Trutnov                  & 33.   & ČS Brno-Popovice\\
+        11.   & ČS Jindřichův Hradec        & 34.   & ČS Roudnice nad Labem\\
+        12.   & ČS Vysoké Mýto              & 35.   & ČS Vysokov u Náchoda\\
+        13.   & ČS Havraň                   & 36.   & ČS Praha - Štěrboholy\\
+        14.   & ČS Kolaje u Poděbrad        & 37.   & ČS Řasnice-Strážný\\
+        15.   & ČS Ústí n. L., Božtěšická   & 38.   & ČS Břest u Kroměříže\\
+        16.   & ČS Praha, Dolní Měcholupy   & 39.   & ČS Vojtanov\\
+        17.   & ČS Kbelnice                 & 40.   & ČS Dobkovice u Děčína\\
+        18.   & ČS Havlovice u Domažlic     & 41.   & ČS Březno u Loun D7\\
+        19.   & ČS Mělník                   & 42.   & ČS Brno-Hviezdoslavova\\
+        20.   & ČS Krupá u Rakovníka        & 43.   & ČS Studénka - D1 exit 336\\
+        21.   & ČS Dolní Dvořiště - ONO I   & 44.   & ČS Ostrov nad Ohří\\
+        22.   & ČS Dolní Dvořiště - ONO II  & 45.   & ČS Chlumčany u Přeštic\\
+        23.   & ČS Církvice u Kutné Hory
+    \end{tabular}
+\end{table}
 
 \subsubsection{Vyřazené čerpací stanice}
 
@@ -723,11 +684,43 @@ z projektu vyřadit, neboť nesplňují požadavky k dolování dat.
     \item \textbf{Shell, EuroOil, MOL a Prim:} Tyto ČS informace
         o cenách PHM na svých webových stránkách vůbec neposkytují,
         čímž nelze data z těchto webových stránek použít.
+    \item \textbf{Makro:} Tato ČS sice ceny na webu uvádí, a to
+        v přijatelném formátu, ale web implementuje pokročilé
+        antiscraping mechanismy, které detekují a blokují crawlery
+        podobné tomuto projektu. Z toho důvodu byl tento crawler
+        během jeho vývoje vyřazen. Crawler zkrátka nemohl tyto
+        mechanismy obejít a k implementaci protichůdných opatření
+        již nezbýval dostatek času.
 \end{itemize}
 
 \subsubsection{Threading a strukturizace crawleru}
 
-% TODO: Postup tvorby crawleru
+V datové příloze a také na webové stránce
+\texttt{\url{github.com/POL0423/petrolscan-crawler}} lze vidět zdrojový
+kód crawleru. Součástí tohoto zdrojového kódu je soubor \texttt{Dockerfile},
+který definuje obrázek pro Docker kontejner. Lze si jej představit jako jakousi
+předlohu pro souborový systém uvnitř kontejneru. Crawler je rozdělen na několik
+částí, která každá plní svou specifickou úlohu:
+
+\begin{itemize}
+    \item \textbf{Hlavní část:} Tuto část představuje soubor \texttt{src/main.ts}.
+        Jedná se o hlavní spouštěcí kód, který volá další moduly.
+    \item \textbf{Dílčí crawlery:} Tyto části provádějí samotnou sklizeň. Jedná se
+        o samotnou implementaci logiky dílčích crawlerů. To jsou dva moduly: Globus
+        a ONO. Oba tyto moduly mají společný nadřazený abstraktní modul, který
+        definuje společné vlastnosti a metody těchto modulů.
+    \item \textbf{Databázová spojka:} Tato část propojuje crawlery s databází
+        a umožňuje jim do databáze zapisovat nasbíraná data.
+    \item \textbf{Definice datových typů:} V této části definuji některé datové
+        typy, které dílčí crawlery používají. Datové typy jsou definovány kvůli
+        snadnější identifikaci a implementaci práce s informacemi.
+    \item \textbf{Crontab:} Hlavní spouštěcí kód je definován jako index
+        v souboru \texttt{package.json}. V souboru \texttt{scripts/run_cron.sh}
+        je definován příkaz ke spuštění tohoto hlavního spouštěcího kódu. Tento
+        soubor je poté referencován souborem \texttt{scripts/jobs.crontab},
+        který tento skript periodicky spouští každý den ve 3:00 a zajišťuje
+        zapisování výstupu konzole do logovacího souboru.
+\end{itemize}
 
 \subsection{Databáze}
 
