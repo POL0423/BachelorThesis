@@ -37,19 +37,563 @@ tohoto procházení a čtení dat je popsán v následujících podsekcích.
     \item Nyní je třeba zjistit seznam jednotlivých poboček kliknutím na tlačítko
         \emph{Vybrat pobočku}. Toto tlačítko se nachází v hlavičce stránky,
         popsáno je CSS selektorem \texttt{div\#\_\_nuxt header\#header button.btn-lg}.
-    \item [...]
+    \item Po kliknutí na tlačítko by se měl otevřít panel se seznamem prodejen.
+        Pokud se panel neotevřel, zkouší crawler kliknout na tlačítko znovu.
+        Nepovede-li se to ani tehdy, proces ukončuje. Panel je popsán CSS selektorem
+        \texttt{\#input\_9}.
+    \item Po otevření panelu by se měl zobrazit seznam prodejen, který je popsán
+        CSS selektorem \texttt{\#input\_9 > ul}. Veškeré lokace (popsané CSS
+        selektorem \texttt{\#input\_9 > ul > li}) se propíšou do pole strukturovaného
+        pomocí objektu v každé položce, kde atribut \texttt{value} má hodnotu
+        \texttt{data-option-value} samotné položky HTML seznamu
+        (\texttt{\#input\_9 > ul > li}) a atribut \texttt{name} má hodnotu popisku
+        (\texttt{\#input\_9 > ul > li label}). Atribut \texttt{name} je složen ze dvou
+        částí:
+        \begin{enumerate}
+            \item Hlavní popisek
+                (\texttt{label span.items-baseline > span.text-base})
+            \item Vedlejší popisek
+                (\texttt{label span.items-baseline > span.text-xs})
+        \end{enumerate}
+        Vedlejší popisek není vždy přítomen. Pokud je přítomen, vloží se jeho obsah
+        s pomlčkou před vedlejším popiskem za ten hlavní.
+        
+        Následující sekvence popisuje proceduru pro jednu lokaci (tato procedura
+        se opakuje do poslední lokace, opakovaná sekvence je uzavřena mezi horizontální
+        čáry).
+        \hrule
+    \item Pro každou prodejnu se nyní vytváří nový prohlížeč. V tomto prohlížeči
+        se znovu načítá webová stránka Globusu. Opět se odsouhlasí cookies. Pokud
+        není dialog s cookies k dispozici, procedura se přeskočí. Pokud se nepovede
+        vytvořit pro lokaci prohlížeč, lokace se přeskakuje.
+    \item Opět se kliká na tlačítko \emph{Vybrat pobočku}. Pokud se to nepovede,
+        cyklus končí chybou a lokace se přeskočí.
+    \item Crawler čeká na otevření panelu. Neotevře-li se do 20 sekund, lokace
+        se přeskočí. Posléze čeká na načtení seznamu prodejen.
+    \item Zde je důležitý atribut \texttt{value}, který si crawler ukládal.
+        Jeho hodnota je totiž shodná s hodnotou \texttt{data-option-value} u položky
+        lokace v seznamu. Crawler nyní zkouší kliknout na popisek této položky
+        (\texttt{\#input\_9 > ul > li[data-option-value="\$\{location.value\}"] > label},
+        kde \texttt{\$\{location.value\}} je hodnota uloženého atributu \texttt{value}).
+        K tomu má k dispozici 3 metody:
+        \begin{enumerate}
+            \item \textbf{Kliknutí pomocí JS.} V prohližeči crawler zkouší kliknout
+                na dané tlačítko. Zda-li byla prodejna vybrána, verifikuje crawler
+                kontrolou viditelnosti nadpisu detailu. V případě, že nadpis detailu
+                je viditelný, pokus byl úspěšný. V opačném případě crawler zkouší další
+                metodu.
+            \item \textbf{Kliknutí „na sílu“.} Crawler zkouší na položku kliknout
+                mimo konzoli prohlížeče, opět probíhá verifikace prostřednictvím
+                kontroly viditelnosti nadpisu detailu. Neúspěch znamená přesun na poslední
+                metodu.
+            \item \textbf{Vyhledání pomocí textu.} Jako poslední možnost využije
+                crawler vyhledání textu. Prohledá všechny položky a snaží se najít
+                odpovídající text. V případě, že lokaci najde, zkouší na ní kliknout,
+                úspěch verifikuje kontrolou viditelnosti nadpisu detailu. Pokud je nadpis
+                viditelný, pokus byl úspěšný a vyhledávání končí. Pokud nebyl úspěšný, crawler nechá vyhledávání doběhnout a posléze, pokud do té doby nebyl
+                úspěšný, končí pokus o otevření lokace a její zpracování se přeskakuje.
+        \end{enumerate}
+    \item Nyní crawler zkouší načíst stránku s detaily (popsána CSS selektorem
+        \texttt{\#teleport-target div.flex.items-center.gap-x-4}). Z této stránky
+        si vytáhne název stanice
+        (\texttt{\#teleport-target span.text-sm.lg\textbackslash:text-base})
+        a následně si z posledního sloupce z první sekce z každého řádku tabulky
+        (\texttt{\#teleport-target div.lg\textbackslash:pl-6 section:nth-child(1)
+        > table.w-full > tbody > tr}) vytáhne údaje o palivu (\texttt{th.text-left})
+        a jeho ceně (\texttt{td.text-right}). Cenu naformátuje do číselného datového
+        typu (odstraní identifikátor měny a nahradí čárku tečkou, posléze údaj
+        předá číselnému parseru) a údaje o palivu naformátuje do objektu s těmito
+        atributy:
+        \begin{itemize}
+            \item \texttt{name}: Název paliva nebo doplňkového zboží z tankovacího
+                stojanu. Doplňkové zboží může být kapalina do ostřikovačů nebo AdBlue.
+            \item \texttt{price}: Cena paliva v Kč.
+        \end{itemize}
+        Pokud nebyly nalezeny žádné informace o palivech, prodejna je přeskočena.
+        Objekty s údaji o palivech crawler vkládá do pole, které je vkládáno do objektu
+        s údaji o prodejně (název a lokalita). Tento objekt je vkládán do pole obsahující
+        všechny prodejny. Pokud při zpracování lokace dojde k chybě, crawler pořídí
+        ladící screenshot a lokalitu přeskakuje.
+        \hrule
+        Zde je konec opakované procedury. Nasbíraná data si crawler uloží do svého
+        datasetu a pokračuje dále.
+        
+        Následující sekvence popisuje nový cyklus, ohraničený novými horizontálními
+        čarami.
+        \hrule
+    \item Pro každou lokaci s nasbíranými daty následně crawler vyhledá GPS souřadnice
+        ČS u dané prodejny. K tomu jsem si vybral API \emph{OSM Nominatim}, které
+        je zdarma a open-source. API má rate limit, tudíž každé volání musí být
+        s prodlevou alespoň 1 sekundy. URL má tento formát:
+        
+        \begin{tt}
+            \centering
+            https://nominatim.openstreetmap.org/search?q=Globus+\$\{searchTerm\}\&format=json
+        \end{tt}
+        
+        Výraz \texttt{\$\{searchTerm\}} označuje název lokace, který se pro vyhledávání
+        použije. Pokud má lokace upřesnění místa (za pomlčkou, jedná se zejména o pražské
+        pobočky a o tu plzeňskou), použije se pouze část za pomlčkou. Je to z toho důvodu,
+        že během testování jsem zjistil, že OSM nebere název hlavního města společně
+        s upřesněním čtvrti, ale pouze název městské čtvrti, v souvislosti s Globusem.
+        Odpověď, která je ve formátu JSON, crawler interpretuje jako pole objektů.
+        Z těchto dat nás zajímají jen GPS souřadnice odpovídající položky. Pokud OSM server
+        nevrátí data ve formátu pole, nastavujeme nulové souřadnice a pokračujeme na zápis
+        dat do databáze. V opačném případě postupujeme dalším krokem.
+    \item GPS souřadnice jsou uvedené v textovém datovém typu, nikoliv v číselném.
+        Z toho důvodu je třeba souřadnice na číselný datový typ převést. Hledáme souřadnice
+        pro položku typu ČS, která je definována atributem \texttt{type} s hodnotou
+        \texttt{fuel}. Pokud nelze čísla nalézt nebo jejich formát není strojově čitelný,
+        použijí se souřadnice prodejny (\texttt{type: "supermarket"}). Pokud ani tehdy nelze
+        souřadnice najít, použijou se nulové. Z těchto dat se následně vytvoří objekt lokace,
+        který obsahuje název lokace a její souřadnice.
+    \item V tomto bodě probíhá iterace jednotlivých paliv dané prodejny. V každé iteraci
+        jsou údaje o názvu a lokace ČS společně s jednotlivými palivy zapisovány do databáze.
+        K tomuto účelu jsem si vytvořil vlastní knihovnu, která data nejen zapisuje, ale
+        také kontroluje jejich přítomnost a zda nedošlo k jejich aktualizaci od posledního
+        zápisu. Tato knihovna používá speciálně navržený formát dat, který je popsán dále.
+        \hrule
+    \item Zde je konec procedury. Posledním krokem je ukončení procesu.
 \end{enumerate}
+
+Jedna z věcí, kterou musím zmínit, je fakt, že Globus, soudě dle názvů CSS tříd, používá
+na své webové stránce Tailwind CSS. Tailwind je CSS knihovna vyvinutá pro React, je velmi
+pravděpodobné, že Globus používá nějakou formu Reactu. Z jednoho HTML elementu vyplývá,
+že by mohlo jít o Nuxt.js, což je framework postavený na Reactu.
 
 \subsection{Procházení ČS ONO}
 
-[...]
+Síť ČS ONO používá oproti Globusu jednodušší a starší formát webové aplikace.
+Většina moderních webů dnes využívá React. ONO zůstává u osvědčeného modelu PHP
+aplikace, který se stále používá i dnes (např. WordPress nebo knihovna Laravel
+běží na PHP backendu). Výsledkem je více člověkem čitelnější HTML kód, který
+je rovněž jednodušší ke strojovému čtení a analýze pro automatický crawler.
+
+\begin{enumerate}
+    \item Po načtení hlavní webové stránky crawler hledá mapu odkazů na dílčí stránky
+        jednotlivých ČS, která se nachází na obrázku obsahující mapu ČR. Jediný důvod,
+        proč je používaná mapa odkazů na obrázku, je především skutečnost, že jsou odkazy
+        v kódu seřazené tak, jak jdou číselně za sebou dle tabulky níže. Tabulka sice udává
+        jejich pořadí semanticky, nicméně odkazy jsou seřazené do sloupců, kód však postupuje
+        v posloupnosti podle řádků. Reálně se jedná spíše o mou preferenci, crawler by stejně
+        tak mohl použít i odkazy v tabulce. Jednotlivé dílčí odkazy jsou popsány CSS
+        selektorem \texttt{map\#mapname > area}.
+    \item Z každého odkazu jsou brané atributy \texttt{href} a \texttt{alt}. Atribut
+        \texttt{href} označuje URL komponentu, která vede na stránku dané ČS, zatímco
+        atribut \texttt{alt} obsahuje lokalitu dané ČS. Tyto údaje jsou formátovány
+        do objektu, který se stává položkou v připraveném seznamu odkazů a jejich popisků.
+        Tento bod se opakuje dokud nejsou vyčerpány všechny odkazy.
+
+        Následující sekvence (ohraničená horizontálními čarami) obsahuje proceduru
+        extrakce dat z dílčích stránek jednotlivých ČS. Tato sekvence se opakuje
+        do vyčerpání všech lokalit.
+        \hrule
+    \item Pro každou stránku jednotlivých ČS vytváříme nový prohlížeč. Pokud z jakéhokoliv
+        důvodu vytvoření prohlížeče selže, lokalita je přeskočena a do konzole je vypsána
+        chyba.
+    \item Prohlížeč načítá stránku detailu ČS z vytaženého odkazu. Po načtení extrahuje
+        obsah nadpisu (\texttt{div\#nadpis}), který představuje plný název lokality.
+        Vytažený nadpis je posléze upraven odstraněním přebytečných mezer. Pokud tento
+        či jakýkoliv následující bod v této sekvenci selže, crawler pořídí ladící
+        screenshot a lokalitu přeskakuje.
+    \item Uložený název lokality z mapy na hlavní stránce crawler nyní upravuje pro pozdější
+        vyhledávací dotaz pro OSM Nominatim. Během vývoje jsem zjistil, že některé ČS ONO
+        nelze vyhledat jednoduše podle vytaženého názvu lokality, ale obměnou
+        nebo vypuštěním některých částí názvu lokality. Název je upraven dle následujících
+        pravidel:
+        \begin{itemize}
+            \item Obsahuje-li název lokality slovo \emph{exit} (implikující umístění
+                v nespecifikované blízkosti sjezdu z dálnice mimo její trasu), specifikace
+                tohoto dálničního sjezdu je z názvu vypuštěna. V současnosti se to týká jen
+                ČS v obci Studénka. Regulární výraz této specifikace je popsán následovně:
+                
+                \begin{tt}
+                    \centering
+                    / *[,-] +D[0-9]+ +exit +[0-9]+/g
+                \end{tt}
+            \item Končí-li název lokality na sekvenci znaků \texttt{ONO I}
+                nebo \texttt{ONO II}, specifikace řetězce je z názvu vypuštěna a římská
+                číslice je nahrazena jejím arabským protějškem.
+            \item Během testování vyhledávacího dotazu v API OSM Nominatim jsem zjistil
+                konkrétně u lokality ČS Břest u Kroměříže, že je třeba zadat pouze název
+                \emph{Břest}, jelikož vyhledávací dotaz obsahující plný název lokality
+                nefunguje. Přebytečnou specifikaci tak crawler v tomto bodě vypouští.
+        \end{itemize}
+    \item Crawler nyní vytahuje jednotlivá data o palivech (jejich název a cenu).
+        Síť ČS ONO řeší tuto tabulku poněkud netradičně. Názvy paliv jsou ve formě
+        obrázku s textem, zatímco ceny jsou poskládané z jednotlivých číslic, která
+        připomínají sedmisegmentový displej. Patrně se tak snaží imitovat fyzické stojany
+        s ceníkem paliv a doplňkových produktů na daných lokalitách. Jelikož tabulka
+        je celá tvořena obrázky, je potřeba identifikovat pouze ty buňky, které obsahují
+        údaje, které nás zajímají. To částečně řeší následující CSS selektor:
+
+        \begin{tt}
+            \centering
+            div\#stojan > table tr:has(> td:nth-child(1) > img):has(> td:nth-child(2) > img)
+        \end{tt}
+
+        Částečně, protože tento selektor vybere i ty řádky, které obsahují pouze piktogramy
+        informující o nabízených službách (například automyčka). Ty však nejsou pro účely
+        tohoto projektu relevantní, navíc neobsahují žádné informace o ceně.
+        Tabulka má také třetí sloupec. Ten však obsahuje ceník v eurech, který pro nás
+        není relevantní. Spokojíme se tedy jen s prvním a druhým sloupcem.
+
+        Pro každý řádek, který odpovídá našemu zadání, vybereme obrázek v buňce
+        obsahující název produktu (\texttt{td:nth-child(1) > img}) a buňku obsahující
+        cenu produktu v Kč (\texttt{td:nth-child(2)}). Tyto řádky strukturujeme
+        do objektu, kde každý objekt představuje položku v poli.
+
+        Tyto položky poté filtrujeme podle platných názvů palivových a doplňkových
+        produktů z tankovacích stojanů ve formátu URL jejich obrázků, a podle platných
+        číslic (prázdné ceny jsou přeskočeny).
+    \item Vyfiltrované položky znovu projdeme a provedeme konverzi z URL obrázků
+        na platné hodnoty jmen produktů a číslic. Zde pomůže fakt, že v tabulce
+        na webové stránce je vždy celkem 5 cifer ceny (včetně těch prázdných), a cena
+        v Kč vždy uvádí haléře na 2 desetinná místa. Tímto lze optimalizovat konverzní
+        kód tak, že s desetinnou čárkou počítá za třetí cifrou. Prázdnou cifru si lze představit jako pomyslnou úvodní nulu před desetinnou čárkou a pomyslnou závěrečnou
+        nulu za desetinnou čárkou. Tyto číslice konverzní program extrahuje ze sekvence
+        spojených URL údajů do textového formátu, který následně převádí na číselný datový
+        typ. Zkonvertované datové údaje tak lze vložit do objektu uvádějící název a cenu
+        daného paliva, a tyto objekty nyní tvoří položky v seznamu paliv. Pokud žádná
+        paliva nebyla nalezena, lokalita je přeskočena. To se může stát v případě, kdy
+        je ČS uzavřena. Zpravidla to však značí chybový stav.
+    \item Jako poslední bod této sekvence je poskládání informací o palivech společně
+        s údaji o lokalitě do společného objektu, který se následně vkládá do pole
+        obsahující všechny ČS této sítě.
+        \hrule
+    \item Toto je konec předchozí cyklické sekvence. Následně data uložíme do datasetu
+        crawleru a pokračujeme dále na zápis do databáze. Postup zápisu do databáze
+        je fundamentálně shodný s postupem v případě Globusu, liší se jen způsob tvorby
+        vyhledávacího dotazu pro OSM Nominatim. Jelikož v názvu se nyní vyskytují mezery,
+        ty je třeba nahradit znakem \texttt{+}, který v URL query sekvenci znamená mezeru.
+        Teoreticky by se měla také provést kodifikace Unicode znaků (znaky mimo běžnou ASCII
+        hodnotu), ale \emph{Node.js Fetch} tuto konverzi provede sám.
+\end{enumerate}
+
+\subsection{Zápis do databáze}
+
+Jelikož databáze je strukturovaná pomocí tabulky, údaje o ČS se opakují pro každé
+nabízené palivo a dodatkové produkty z tankovacích stojanů. JSON formát těchto dat,
+jak je přijímá logovací knihovna pro databázi, je k dispozici v listingu
+\ref{lst:dbdata-json} na stránce \pageref{lst:dbdata-json}. Formát je zkrácen
+na příklad a komentáře, plný popis tohoto formátu je ve zdrojovém kódu v datové příloze
+a v GitHub repozitáři. Datová struktura MySQL tabulky je vidět v tabulce
+\ref{tab:petrolscan_data-structure} na stránce \pageref{tab:petrolscan_data-structure}.
+
+\begin{lstlisting}[caption={JSON formát dat pro logovací knihovnu},label=lst:dbdata-json]
+{
+    "StationName": "Globus",        // Název řetězce
+    "StationLocation": {
+        "name": "Ostrava",          // Název lokace
+        "lat": 0,                   // Zeměpisná šířka (latitude)
+        "lon": 0                    // Zeměpisná délka (longitude)
+    },
+    "FuelName": "Natural 95",       // Název paliva
+    "FuelType": "PETROL",           // Typ paliva
+    "FuelQuality": "STANDARD",      // Kvalita paliva
+    "FuelPrice": 21.6               // Cena paliva v Kč
+}
+\end{lstlisting}
 
 \section{Frontend}
 
-[...]
+Implementace frontendu srovnávací aplikace je řešena pomocí \emph{Node.js}
+s využitím frameworku \emph{Next.js}, který je založen na Reactu. Next.js
+poskytuje vývojářské nástroje pro rychlou tvorbu webového designu, a poskytuje
+nástroje, které umožňují kombinovat klientské prvky s těmi serverovými,
+kde část stránky zpracovává data na pozadí na straně serveru, a ta poté již
+zpracovaná pošle uživateli. Výhodou této formy rozdělení úkonů aplikace je,
+že není potřeba zvlášť vytvářet API pro komunikaci s databází, část aplikace
+prostě kontaktuje databázi přímo, aniž by došlo k úniku autentizačních
+údajů na stranu uživatelskou, a uživatel i přesto dostane data zpracovaná
+dle jeho požadavků.
+
+\subsection{Vytvoření projektu}
+
+Prvním krokem je samozřejmě vytvoření projektu. Předpokladem je samozřejmě
+nainstalovaný Node.js na vývojovém systému. Spustíme příkaz
+\texttt{\$ npx create-next-app@latest} a nastavíme základní informace
+o projektu (viz listing \ref{lst:npx-create-next} na stránce
+\pageref{lst:npx-create-next}).
+
+\subsection{Tvorba hlavní stránky}
+
+Hlavní stránka je vstupní branou do aplikace. Ukáže se, když zadáme
+do prohlížeče doménu aplikace. Má aplikace je celkem jednoduchá. Cílem
+je poskytnout jednoduché rozhraní, ze kterého může uživatel jednoduše
+zadat lokaci a radius vyhledávání, a výsledky vyhledávání řadit dle
+ceny vzestupně či sestupně (od nejlevnějšího či nejdražšího) a také filtrovat
+dle typu či kvality produktu z tankovacího stojanu. Na některých ČS totiž
+nejsou v tankovacích stojanech k dispozici jen paliva, ale také produkty,
+které neslouží jako palivo, ale slouží jako vedlejší spotřební zboží nutné
+k bezpečnému a ekologickému provozu automobilu (např. AdBlue nebo kapalina
+do ostřikovačů).
+
+V datové příloze je k dispozici zdrojový kód této aplikace. Soubor
+\texttt{src/app/page.tsx} obsahuje TS kód definující rozvržení a obsah
+hlavní stránky. Design byl vypůjčen z ukázkového projektu z kurzu Next.js
+vyvinutého společností Vercel, který jsem absolvoval před zahájením práce
+na frontendu mé aplikace. Stránka se skládá zejména z hlavičky,
+postranního panelu s vyhledávacím formulářem a ilustračního obrázku vpravo,
+který ukazuje příklad s výsledky vyhledávání ve formě prohlížeče v PC
+i v mobilním zobrazení (viz obrázek \ref{fig:web-home-desktop} na stránce
+\pageref{fig:web-home-desktop}). Mobilní rozvržení této stránky ukazuje
+alternativní obrázek jen s mobilním zobrazením výsledků vyhledávání a postranní
+panel se posouvá nad ilustrační obrázek (viz obrázek \ref{fig:web-home-mobile}
+na stránce \pageref{fig:web-home-mobile}).
+
+V postranním panelu se nachází vyhledávací formulář. Jeho součástí je pole
+pro zadání vztažné lokality, a zároveň je zobrazeno pole pro zadání okruhu
+vyhledávání. Pole pro zadání vztažné lokality je interaktivní, uživatel při
+zadávání dostává našeptávač s upřesněním lokality. Aplikace pro tento účel
+využívá API OSM Nominatim, které poskytuje geografické vyhledávací rozhraní.
+Při psaní se v prohlížeči uživatele spouští kód, který kontaktuje API OSM
+s vyhledávacím dotazem vepsaným do vyhledávacího pole, a pokud jsou vráceny
+výsledky vyhledávání, zobrazí se našeptávač s jednotlivými nalezenými položkami,
+jejichž počet je omezen na 10. Uživatel může vybrat jednu z položek, čímž
+našeptávač zavře a svůj vyhledávací dotaz nahradí vybranou položkou
+z našeptávače. Odesláním formuláře se dostane uživatel na stránku s výsledky
+vyhledávání.
+
+\subsection{Výsledky vyhledávání}
+
+Tato stránka má design shodný s hlavní stránkou, ovšem místo ilustračního
+obrázku se na stránce nachází výsledky vyhledávání seřazené ve výchozím
+nastavení od nejlevnějších po nejdražší (viz obrázky
+\ref{fig:web-search-desktop} na stránce \pageref{fig:web-search-desktop}
+a \ref{fig:web-search-mobile} na stránce \pageref{fig:web-search-mobile}).
+Pokud nebyly nalezeny žádné výsledky, stránka skutečnost uživateli
+oznámí. Ve zdrojovém kódu v datové příloze je TS kód této stránky v souboru
+\texttt{src/app/search/page.tsx}.
+
+Výsledky vyhledávání jsou doplněny o možnosti řazení položek dle ceny produktů
+vzestupně (od nejlevnějších) nebo sestupně (od nejdražších) a filtrování položek
+podle typu produktu či jeho kvality. Pro jednoduchost lze filtrovat pouze
+dle jednoho typu a dle jedné kvality. Tyto možnosti řazení a filtrování jsou
+pomocí skrytých políček ve vyhledávacím poli zachovány při úpravě vyhledávacích
+parametrů.
+
+Technickým řešením pro zpracování vyhledávacího dotazu je ještě jedno volání
+API OSM Nominatim, tentokrát však výsledky vyhledávacího dotazu limituje
+na jediný. Z vrácených dat si vytahuje GPS souřadnice nalezeného místa
+(zeměpisnou šířku a délku). Tyto souřadnice následně využívá k filtrování
+dat v databázi dle vzdálenosti od souřadnic dané ČS. K tomu využívá speciální
+SQL funkci \texttt{ST\_Distance\_Sphere()}, která počítá vzdálenost dvou bodů
+na kulové ploše. Poloměrem koule je poloměr Země, který činí 6371 km.
+Body jsou určeny pomocí GPS souřadnic vztažného místa a umístění ČS. Jelikož
+data jsou strukturovaná do tabulky, je potřeba sdružit data paliv a doplňkových
+produktů z tankovacích stojanů do společného datového objektu pro každou ČS.
+MySQL od verze 5.7.22 nabízí JSON funkce. Tato data jsou následně seřazena dle
+ceny produktů vzestupně či sestupně. Výchozí SQL dotaz vypadá následovně:
+
+\begin{lstlisting}[label=lst:default-sql-query,caption={SQL dotaz srovnávače cen},language=sql]
+SELECT
+    station_name,
+    station_loc_name,
+    station_loc_lat,
+    station_loc_lon,
+    MAX(timestamp) AS last_update,
+    JSON_ARAYAGG(
+        JSON_OBJECT(
+            'id', id,
+            'timestamp', timestamp,
+            'fuel_type', fuel_type,
+            'fuel_quality', fuel_quality,
+            'fuel_name', fuel_name,
+            'fuel_price', fuel_price
+        )
+    ) AS fuels
+FROM petrolscan_data
+WHERE (
+    ST_Distance_Sphere(
+        POINT(station_loc_lon, station_loc_lat),
+        POINT(?, ?),
+        6371
+    ) <= ?
+)
+GROUP BY
+    station_name,
+    station_loc_name,
+    station_loc_lat,
+    station_loc_lon
+ORDER BY fuel_price ASC;
+\end{lstlisting}
+
+Prvním a druhým argumentem jsou zde GPS souřadnice vztažného místa v pořadí zeměpisné
+délky a šířky (tedy obrácené pořadí oproti běžnému zápisu šířky a délky), třetím
+argumentem je maximální vzdálenost v kilometrech. Číslo \texttt{6371} představuje
+poloměr Země v kilometrech.
+
+Pokud chceme řazení dle ceny sestupně, místo \texttt{ORDER BY fuel\_price ASC}
+se použije \texttt{ORDER BY fuel\_price DESC}.
+
+Pokud navíc chceme filtrovat jen určitý typ paliva či doplňkového zboží nebo
+jeho kvalitu, tak za porovnání výsledku funkce \texttt{ST\_Distance\_Sphere()}
+s maximální vzdáleností přidáme ještě porovnání se zadaným typem, případně
+kvalitou, pomocí booleanovského operátoru \texttt{AND}.
+
+Takto získaná data následně zpracujeme do přehledného seznamu, který obsahuje:
+
+\begin{itemize}
+    \item název stanice včetně jejího umístění a GPS souřadnic,
+    \item seznam produktů s jejich názvem, cenou, typem a kvalitou,
+    \item vzdálenost ČS od vztažného místa v kilometrech,
+    \item celkový počtet produktů
+    \item a poslední aktualizaci dané lokality.
+\end{itemize}
+
+Vzdálenost ČS od vztažného místa program počítá pomocí haversinového vzorce.
+Postup výpočtu je následující:
+
+\begin{equation}
+    \label{eq:haversine-formula}
+        d   =   2 \cdot R \cdot \arcsin \sqrt{
+                    \sin^2 \frac{\Delta\varphi}{2} +
+                    \cos \varphi_1 \cdot \cos \varphi_2 \cdot
+                    \sin^2 \frac{\Delta\lambda}{2}
+                }~[\text{km}]
+\end{equation}
+
+kde \(R = 6371~\text{km}\), \(\varphi_1\) a \(\lambda_1\) jsou GPS souřadnice
+vztažného místa (zeměpisná šířka a délka), \(\varphi_2\) a \(\lambda_2\)
+jsou GPS souřadnice ČS, \(\Delta\varphi = \varphi_2 - \varphi_1\)
+a \(\Delta\lambda = \lambda_2 - \lambda_1\).
+
+Zeměpisné šířky a délky je třeba před výpočtem převést na radiány, k čemuž
+by měl sloužit tento vzorec:
+
+\begin{equation}
+    \label{eq:deg-to-rad}
+    \varphi_{\text{rad}} = \pi \cdot \frac{\varphi_{\text{st}}}{180}
+\end{equation}
+
+Výsledkem těchto výpočtů je vzdálenost mezi dvěma body na Zemi v kilometrech.
 
 \section{Ostatní součásti a jejich propojení}
 
-[...]
+Posledním krokem je kontejnerizace těchto dílčích služeb. V listingu
+\ref{src:docker-compose.yml} na stránce \pageref{src:docker-compose.yml}
+lze vidět soubor \texttt{docker\_compose.yml}, který je jinak dostupný
+také v repozitáři\\
+\texttt{https://github.com/POL0423/petrolscan-docker-compose}.
+
+Během testování v Docker kontejnerech jsem musel udělat některé malé
+změny, neboť došlo ke změně funkčnosti jednotlivých dílů, některé součásti
+bez úprav prostředí a programu nefungovaly správně. Chyby se mi podařilo
+vyřešit, a tak zbývala poslední věc: nahrát to vše na server a nastavit
+reverse proxy. Zjistil jsem, že na serveru chyběl Docker compose,
+ten tedy bylo potřeba doinstalovat, a zřejmě nebyl správně nainstalovaný
+Docker, tudíž jsem musel Docker přeinstalovat.
+
+\begin{verbatim}
+$ sudo dnf install docker docker-ce docker-compose-plugin
+\end{verbatim}
+
+Vyskytly se potíže s oprávněními, které se mi vyřešit nepodařilo,
+takže Docker je třeba ovládat přes \texttt{sudo}. To není nikterak
+limitující, jen je třeba čas od času zadat heslo. Větší problém byla
+konfigurace sítě. Změny totiž nebyly zapsány trvale a došlo k odejmutí
+nastavení IPv6 adresy. Řešením bylo IP adresu nastavit znovu a změnit
+konfiguraci IPv6 adresování na ruční. Tím bylo vypnuto dotazování DHCP
+serveru pro IPv6 a serveru tím pádem zůstává ručně přidělená IPv6 adresa.
+DHCP server IPv6 adresy nepřiděluje, pouze IPv4.
+
+Poté, co jsem vše nastavil, jsem také nainstaloval Nginx následujícím
+příkazem:
+
+\begin{verbatim}
+$ sudo dnf install nginx
+\end{verbatim}
+
+Nyní zbývá nastavit SSL. V souboru \texttt{/etc/nginx/nginx.conf}
+lze vidět v kontextu \texttt{http} následující příkaz:
+
+\begin{verbatim}
+include /etc/nginx/conf.d/*.conf;
+\end{verbatim}
+
+To znamená, že konfigurace použije všechny platné moduly, které se nachází
+v adresáři \texttt{/etc/nginx/conf.d}. Proto jsem se rozhodl vytvořit
+v tomto adresáři soubor \texttt{pol0423-stu.vsb.cz.conf}, který obsahuje
+konfiguraci pro reverse proxy s přesměrováním na HTTPS
+a v adresáři \texttt{/etc/nginx/snippets} jsem vytvořil další
+soubory s nastavením SSL. (viz listingy \ref{src:pol0423-stu.vsb.cz.conf}
+na stránce \pageref{src:pol0423-stu.vsb.cz.conf},
+\ref{src:snippets/ssl-params.conf} na stránce
+\pageref{src:snippets/ssl-params.conf} a \ref{src:snippets/self-signed.conf}
+na stránce \pageref{src:snippets/self-signed.conf}).
+
+K tomu je též zapotřebí vytvořit SSL certifikát. Nejprve je potřeba vytvořit
+odpovídající adresáře. Adresář \texttt{/etc/ssl/certs} již existuje, jedná
+se o symbolický odkaz na adresář \texttt{/etc/pki/tls/certs}.
+Vytvoříme tak adresář \texttt{/etc/ssl/private} a vygenerujeme nový
+self-signed SSL certifikát:
+
+\begin{verbatim}
+$ sudo mkdir /etc/ssl/private
+$ sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
+\end{verbatim}
+
+Vyplníme údaje, necháme vygenerovat soukromý klíč a certifikát, a pokračujeme
+dále vytvořením \texttt{dhparams} souboru.
+
+\lstinputlisting[label=lst:ssl-gen,caption={Údaje self-signed certifikátu}]{SourceCodes/ssl-gen.log}
+
+\begin{verbatim}
+$ sudo openssl dhparam -out /etc/nginx/dhparam.pem 4096
+\end{verbatim}
+
+Generování \texttt{dhparam} souboru trvá několik desítek minut, nicméně
+poté je již konfigurace Nginx připravena. Zkontrolujeme integritu
+konfigurace, a pokud je konfigurace v pořádku, restartujeme Nginx.
+
+\begin{verbatim}
+$ sudo nginx -t
+$ sudo systemctl restart nginx
+\end{verbatim}
+
+Nyní je potřeba aplikaci dostat na server. Fakt, že je projekt na GitHubu,
+pomohl v tom smyslu, že jsem mohl jednoduše stáhnout repozitáře.
+
+\begin{verbatim}
+$ git clone https://github.com/POL0423/petrolscan-crawler
+$ git clone https://github.com/POL0423/petrolscan-web-app
+$ git clone https://github.com/POL0423/petrolscan-docker-compose
+\end{verbatim}
+
+Přesuneme se do adresáře \texttt{petrolscan-docker-compose} a spustíme
+příkaz Docker compose:
+
+\begin{verbatim}
+$ cd petrolscan-docker-compose
+$ sudo docker compose up -d
+\end{verbatim}
+
+Tento příkaz sestaví Docker obrázky z dostupných repozitářů a nastaví
+jim síť, porty a perzistentní úložiště na základě souboru
+\texttt{docker-compose.yml}.
+
+Jakmile jsou Docker obrázky sestaveny, dojde k vytvoření a spuštění
+odpovídajících Docker kontejnerů. Necháme proběhnout skript k vyplnění
+databáze a aplikaci lze nyní vyzkoušet na adrese
+\texttt{https://pol0423-stu.vsb.cz/}. Screenshot aplikace na doméně
+serveru si lze prohlédnout na obrázku \ref{fig:web-server}
+na stránce \pageref{fig:web-server}. Všimněte si, že web běží na HTTPS.
+Pokud se pokusíme zadat \texttt{http://pol0423-stu.vsb.cz/}, dojde
+k přesměrování na HTTPS. Server je tedy připraven a spuštěn.
+
+Prohlížeč samozřejmě při první návštěvě zobrazí upozornění, že certifikát
+není důvěryhodný. Je to z toho důvodu, že nemá důvěryhodnou certfikační
+autoritu, je self-signed. Tím se stává kořenovým certifikátem, který OS
+samozřejmě nemá nainstalovaný v seznamu důvěryhodných certifikátů.
+Navíc je protokol \texttt{https} zobrazen v červené barvě a přeškrtnutý,
+a vedle se zobrazuje přeškrtnutá červená ikonka zámečku nebo nápis
+\emph{Nezabezpečeno} (v závislosti na použitém prohlížeči). Ve skutečnosti
+však šifrování funguje, prohlížeči se v tomto případě jen nelíbí skutečnost,
+že certifikát není podepsaný důvěryhodnou certifikační autoritou.
+V reálném použití se samozřejmě self-signed certifikát nedoporučuje používat.
+Jeho použití však nikterak nebrání používání aplikace, a funkční aplikace
+je dostačující k demonstraci. Jelikož webová stránka není dostupná mimo
+školní síť, použití self-signed certifikátu v takovém případě ničemu nevadí.
 
 \endinput

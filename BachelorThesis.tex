@@ -1,3 +1,4 @@
+\UseRawInputEncoding
 % Nejprve uvedeme tridu dokumentu s volbami
 \documentclass[czech,bachelor]{diploma}
 % Dalsi doplnujici baliky maker
@@ -5,7 +6,9 @@
 \usepackage[backend=biber, style=iso-numeric, alldates=iso]{biblatex} % bibliografie
 \usepackage{dcolumn} % sloupce tabulky s ciselnymi hodnotami
 \usepackage{subfig} % makra pro "podobrazky" a "podtabulky"
-\usepackage[sql,php,html,js,ts,css]{diplomalst}
+\usepackage[sql,php,html,js,css]{diplomalst}
+\usepackage{amssymb} % for \checkmark
+\usepackage{amsmath}
 
 % Zadame pozadovane vstupy pro generovani titulnich stran.
 \ThesisAuthor{Marek Poláček}
@@ -37,13 +40,32 @@ práce, kteří mi s prací pomohli, protože bez nich by tato práce nevznikla.
 \EnglishKeywords{application; fuel; price comparison; \LaTeX; bachelor thesis}
 
 \AddAcronym{PHM}{Pohonné hmoty}
-\AddAcronym{ČOI}{Česká obchodní inspekce}
 \AddAcronym{ČS}{Čerpací stanice}
+\AddAcronym{Kč}{Koruna česká}
+\AddAcronym{ČR}{Česká republika}
+\AddAcronym{PC}{Personal Computer}
 \AddAcronym{GPS}{Global Positioning System}
 \AddAcronym{HTML}{Hyper Text Markup Language}
 \AddAcronym{CSS}{Cascade Style Sheet}
 \AddAcronym{SQL}{Structured Query Language}
 \AddAcronym{PHP}{Hyper Text Preprocessor}
+\AddAcronym{SQL}{Structured Query Language}
+\AddAcronym{JS}{JavaScript}
+\AddAcronym{TS}{TypeScript}
+\AddAcronym{DOM}{Document Object Model}
+\AddAcronym{SPA}{Single Page Application}
+\AddAcronym{PWA}{Progressive Web App}
+\AddAcronym{SSR}{Solid State Relay}
+\AddAcronym{SSG}{Special Services Group}
+\AddAcronym{SEO}{Search Engine Optimization}
+\AddAcronym{REST}{Representational State Transfer}
+\AddAcronym{SOAP}{Simple Object Access Protocol}
+\AddAcronym{ORM}{Object Relational Mapping}
+\AddAcronym{CLR}{Common Language Runtime}
+\AddAcronym{CMS}{Content Management System}
+\AddAcronym{RDBMS}{Relational Database Management System}
+\AddAcronym{JVM}{Java Virtual Machine}
+\AddAcronym{ASCII}{American Standard Code for Information Interchange}
 \AddAcronym{VŠB-TUO}{Vysoká škola báňská – Technická univerzita Ostrava}
 \AddAcronym{RHEL}{Red Hat Enterprise Linux}
 \AddAcronym{DNS}{Domain Name System}
@@ -51,8 +73,10 @@ práce, kteří mi s prací pomohli, protože bez nich by tato práce nevznikla.
 \AddAcronym{IP}{Internet Protocol}
 \AddAcronym{TCP}{Transmission Control Protocol}
 \AddAcronym{OS}{Operační systém}
+\AddAcronym{OSM}{OpenStreetMap}
 \AddAcronym{GUI}{Graphical User Interface}
 \AddAcronym{OCR}{Optical Character Recognition}
+\AddAcronym{API}{Application Interface}
 
 \addbibresource{resources.bib}      % Jediné skutečné knižní prameny
 
@@ -77,20 +101,21 @@ práce, kteří mi s prací pomohli, protože bez nich by tato práce nevznikla.
 \clearpage
 
 % A nasleduje text zaverecne prace.
-\input{Chapters/Introduction.tex}
-\input{Chapters/InitialResearch.tex}
-\input{Chapters/SimilarApplications.tex}
-\input{Chapters/Preparations.tex}
-\input{Chapters/Development.tex}
-\input{Chapters/Conclusion.tex}
+\input{Chapters/Introduction}
+\input{Chapters/SimilarApplications}
+\input{Chapters/InitialResearch}
+\input{Chapters/Preparations}
+\input{Chapters/Development}
+\input{Chapters/Conclusion}
 
 % Seznam literatury
 \printbibliography[title={Literatura}, heading=bibintoc]
 
 % Prilohy
 \appendix
-\input{Chapters/Appendix/Appendix1.tex}
-\input{Chapters/Appendix/Appendix2.tex}
+\input{Chapters/Appendix/Appendix1}
+\input{Chapters/Appendix/Appendix2}
+\input{Chapters/Appendix/Appendix3}
 
 % Priloha vlozena primo do hlavniho LaTeX souboru. Ne vsechny prilohy je nutne mit ve zvlastnich souborech.
 %\chapter{Dlouhý zdrojový kód}

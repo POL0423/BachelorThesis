@@ -7,20 +7,57 @@
     \label{fig:vmware-workstation-pro}
 \end{sidewaysfigure}
 
-\newpage
+\newpage        %% BEGIN:LST
 
 \lstinputlisting[label=src:docker-compose.yml,caption={Soubor \texttt{docker-compose.yml} k sestavení Docker kontejnerů}]{SourceCodes/docker-compose.yml}
 
+\lstinputlisting[label=lst:npx-create-next,caption={Tvorba Next.js projektu},literate={√}{{\checkmark}}1]{SourceCodes/npx-create-next.log}
+
+\lstinputlisting[label=src:pol0423-stu.vsb.cz.conf,caption={Soubor \texttt{/etc/nginx/conf.d/pol0423-stu.vsb.cz.conf}}]{SourceCodes/pol0423-stu.vsb.cz.conf}
+
+\newpage
+
+\lstinputlisting[label=src:snippets/ssl-params.conf,caption={Soubor \texttt{/etc/nginx/snippets/ssl-params.conf}}]{SourceCodes/snippets/ssl-params.conf}
+
+\lstinputlisting[label=src:snippets/self-signed.conf,caption={Soubor \texttt{/etc/nginx/snippets/self-signed.conf}}]{SourceCodes/snippets/self-signed.conf}
+
+\lstinputlisting[label=lst:net-modify,caption={Postup modifikace IPv6}]{SourceCodes/net-modify.log}
+
+\newpage        %% END:LST
+
+\begin{sidewaysfigure}
+    \centering
+    \includegraphics[width=\textwidth]{Figures/web-home-desktop.jpg}
+    \caption{Hlavní stránka aplikace zobrazená v prohlížeči na PC}
+    \label{fig:web-home-desktop}
+\end{sidewaysfigure}
+
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{Figures/map_pump.jpg}
-    \caption{Mapa čerpacích stanic ONO}
-    \label{fig:tank-ono-mapa}
+    \includegraphics[width=0.5\linewidth]{Figures/web-home-mobile.jpg}
+    \caption{Hlavní stránka aplikace v mobilním zobrazení}
+    \label{fig:web-home-mobile}
 \end{figure}
 
 \begin{sidewaysfigure}
     \centering
-    \includegraphics[width=\textwidth]{Figures/tank-ono-cs.jpg}
-    \caption{Webová stránka s detailem ČS}
-    \label{fig:tank-ono-stranka}
+    \includegraphics[width=\textwidth]{Figures/web-search-desktop.jpg}
+    \caption{Stránka aplikace s výsledky vyhledávání na PC}
+    \label{fig:web-search-desktop}
 \end{sidewaysfigure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{Figures/web-search-mobile.jpg}
+    \caption{Stránka aplikace s výsledky vyhledávání v mobilním zobrazení}
+    \label{fig:web-search-mobile}
+\end{figure}
+
+\begin{sidewaysfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/web-server.jpg}
+    \caption{Stránka aplikace na serveru}
+    \label{fig:web-server}
+\end{sidewaysfigure}
+
+\endinput

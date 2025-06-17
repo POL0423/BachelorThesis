@@ -1,36 +1,218 @@
-\chapter{Počáteční průzkum}
-\section{Popis problému}
+\chapter{Technologie pro návrh webových aplikací}
 
-Webovou aplikaci porovnávače cen tvoří několik dílčích součástí.
-Zřejmě nejdůležitějšími součástmi jsou:
+Webové aplikace jsou složené z různých vrstev a součástí, které každá
+využívá různé technologie, ať už se jedná o uživatelské rozhraní (frontend),
+aplikační logiku (backend), úložiště zpracovávaných dat (databáze),
+rozhraní, které je propojuje mezi sebou (API) nebo pomocné nástroje,
+jako jsou například webové crawlery, které prohledávají web a stahují
+webový obsah. Základem k tvorbě webové aplikace je porozumění jednotlivým
+součástem a technologiím pro informovanou volbu a implementaci.
+% Ref: ChatGPT konverzace
+
+\section{Frontend}
+
+V začátcích webu se webové stránky tvořily jen pomocí statického HTML a CSS,
+které byly začátkem 90. let standardizovány. Postupně byla funkce doplněna
+o JavaScript, který přidal možnost interaktivity. Vznikaly první JS knihovny,
+které přinášely ještě více funkcí. Jednou z takových starších knihoven
+je např. \emph{jQuery}, která zavedla jednoduchou manipulaci s DOM.
+Komunitní průzkum StackOverflow z roku 2024 ukazuje, že jQuery v té době
+stále používalo kolem 22~\% profesionálních vývojářů. %Ref: GPT/SOSurvey
+Ke stylizované podobě webových stránek se ve velké míře využívaly CSS
+frameworky, jakým je např. \emph{Bootstrap} (2011) nebo \emph{Foundation},
+které obsahují hotové šablony a mřížkové systémy k tvorbě snadného mobilního
+designu. Jejich velkou nevýhodou je však zvětšování objemu přenášených dat.
+
+Od poloviny druhé dekády 21. století se stále více využívají komponentní
+frameworky a knihovny, které umožňují tvorbu bohatých webových aplikací,
+nejčastěji ve formě SPA. Mezi ty nejrozšířenější patří \emph{React},
+který byl v roce 2013 vytvořen společností Facebook (dnes Meta), dále
+mohou vývojáři využít ve svých aplikacích \emph{Angular}, který v roce
+2016 poprvé představila společnost Google, a následuje \emph{Vue.js},
+který je vývojářům k dispozici od roku 2014 díky společnosti Evan You.
+%Ref: GPT/BrowserStack(R/A/V)
+
+React přišel s konceptem virtuálního DOM, čímž zvyšuje výkon a umožňuje
+definici opakovaně použitelných komponent, čímž zjednodušuje údržbu
+a škálovatelnost kódu aplikace. %Ref: GPT/BrowserStack(R/A/V)
+Angular je plnohodnotným frameworkem, který poskytuje rozsáhlý ekosystém
+vestavěných modulů (např. HTTP, routing, aj.), a díky tomu je považován
+za vhodný pro velké podnikové aplikace. Nevýhodou je nutná znalost
+TypeScriptu, což začínajícím vývojářům ztěžuje jejich aklimatizaci
+do tohoto prostředí. %Ref: GPT/BrowserStack(R/A/V)
+Vue.js sází na modularitu. Aplikaci vytvořenou ve Vue.js lze nasadit
+postupně a je méně náročná na výchozí konfiguraci. Vue.js má rovněž
+poměrně silnou komunitu. %Ref: GPT/BrowserStack(R/A/V)
+
+Různé průzkumy odráží popularitu těchto nástrojů. Dle průzkumu StackOverflow
+z roku 2024 React použilo kole 41,6~\% profesionálních vývojářů, zatímco
+na Angular si sáhlo 19,4~\%. U studentů nebo začínajících vývojářů se podíly
+snižují a obrací. %Ref: GPT/SOSurvey
+Jiné zdroje obsahují podobné výsledky. React pohánělo v dubnu 2025
+přes 34 milionů webů, Vue.js zvolili vývojáři 3,7 milionu webů a Angular
+je motorem pouhých 96 tisc webů. %Ref: GPT/BrowserStack(R/A/V)
+
+Za zmínku stojí také kompilovaný framework \emph{Svelte}, který
+má minimální overhead, a standardizovaná knihovna \emph{Web Components},
+která implementuje vlastní HTML prvky.
+
+\subsection{Srovnání výhod a nevýhod}
+
 \begin{itemize}
-    \item web crawler, který vyhledává
-        weby na základě zadaných parametrů a klíčových slov
-        definující obchody,
-    \item algoritmus pro čtení webových stránek a interpretaci
-        obsahu do strukturovaných dat určených k dalšímu zpracování,
-    \item cache, která uchovává přechodná data, čímž šetří výpočetní
-        výkon serveru
-    \item a hosting samotné webové aplikace a API endpointu
-        pro zobrazení dat a jejich prezentaci koncovému uživateli.
+    \item \textbf{React} má velkou komunitní podporu a rozsáhlý ekosystém
+        různých doplňkových frameworků a knihoven (např. Redux nebo Next.js)
+        a umožňuje univerzální použití na webu i v mobilní aplikaci
+        prostřednictvím frameworku \emph{React Native}.
+        
+        \begin{itemize}
+            \item \textbf{Výhodou} jsou především rychlé aktualizace
+                pomocí virtuálního DOM a přehledná komponentní
+                architektura. %Ref: GPT/BrowserStack(R/A/V)
+            \item \textbf{Nevýhodou} může být nutnost učit se JSX syntaxi
+                a časté změny v knihovně a ekosystému.
+        \end{itemize}
+    \item \textbf{Angular} klade důraz na průmyslové aplikace a nabízí
+        k tomu kompletní rámec nástrojů. Od základu nabízí silnou kontrolu
+        správných datových typů prostřednictvím TypeScriptu, nástroje
+        typu \emph{Dependency Injection} a rozsáhlou dokumentaci.
+        %Ref: GPT/BrowserStack(R/A/V)
+
+        \begin{itemize}
+            \item \textbf{Výhodou} je vhodné použití pro velké týmy
+                a složité aplikace, které jsou průmyslového charakteru.
+            \item \textbf{Nevýhodou} je naproti tomu složitost a množství
+                konceptů (zejména směrování, moduly a služby), které
+                zvyšují náročnost vývoje. %Ref: GPT/BrowserStack(R/A/V)
+        \end{itemize}
+    \item \textbf{Vue} je lehčí na pochopení a hodí se i pro menší projekty.
+
+        \begin{itemize}
+            \item \textbf{Výhodou} je všestrannost, podporuje rychlý start
+                i postupné rozšiřování aplikace.
+            \item \textbf{Nevýhodou} je menší tržní podíl oproti Reactu
+                a Angularu, což se odráží ve velikosti ekosystému knihoven.
+                %Ref: GPT/BrowserStack(R/A/V)
+        \end{itemize}
+    \item \textbf{Další knihovny} (např. Svelte, Alpine, Lit, apod.)
+        stále rostou v oblibě díky svému výkonu. Svelte toho dosahuje
+        dopřednou kompilací kódu, zatímco Alpine pro změnu nabízí
+        deklarativní jazyk umožňující jednoduché interakce. Jejich velkou
+        nevýhodou je však malá adopce v komunitě vývojářů.
 \end{itemize}
 
-Další volitelné součásti mohou být:
+Frontendové knihovny a frameworky dnes využívají i přídavné technologie,
+které zlepšují škálovatelnost, stabilitu a bezpečnost. Častěji se využívá
+např. TypeScript, který zlepšuje bezpečnost kódu zavedením kontroly
+datových typů při sestavování aplikace, CSS-in-JS a utility frameworky,
+které zefektivňují stylování (např. Tailwind CSS), a PWA, které přístupy
+považují za service workery. Dále se uplatňují koncepty SSR či SSG (Next.js),
+které zlepšují SEO a zrychlují načítání. Veškeré tyto volby závisí
+na konkrétních potřebách aplikace a týmu, který ji vytváří. Dnes vývojáři
+zpravidla volí moderní JS/TS nástroje, zejména React, Angular nebo Vue,
+pro nové projekty. %Ref: GPT
+
+\section{Backend}
+
+Backend tradičně zajišťovaly skriptovací jazyky a aplikační servery,
+které existují již od začátku 90. let a stále se ve velké míře používají
+i dnes. Již v 90. letech byl pro jednodušší weby dominantí PHP,
+často v kombinaci označované jako \emph{LAMP stack} (Linux, Apache, MySQL
+a PHP). Dodnes se v PHP využívají frameworky jako \emph{Laravel} nebo
+\emph{Symfony}. Dříve se používaly také CGI skripty psané v Perlu nebo C,
+případně Java servlety (JSP). Microsoft zavedl jazyk ASP, který později
+nahradili jazykem ASP.NET, který nyní nese název .NET Core. Na přelomu
+tisíciletí se vynořil agilní rámec \emph{Ruby on Rails}, který urychloval+
+vývoj. Mnohé klasické aplikace byly tvořeny pomocí těchto technologií.
+
+Moderní backend dnes zajišťují architektury, které jsou založené na REST
+microservices, kontejnerizaci a cloudových službách. Velká část vývojářů
+přechází na jazykové frameworky, které umožňují rychlý vývoj a dobrou
+škálovatelnost.
+
 \begin{itemize}
-    \item mapové podklady s API pro práci s polohovými údaji
-        a jejich propojení se získanými daty
-    \item a databáze pro uchovávání historických dat, případně
-        uživatelských dat (preference apod.)
+    \item \textbf{Node.js/JS} umožňuje spouštět JS kód na serveru.
+        %Ref: GPT/NodeIntro
+        Jedná se o otevřené prostředí založené na V8 enginu z prohlížeče
+        Chrome, které efektivně zpracovává I/O v jednovlánové smyčce
+        událostí. %Ref: GPT/NodeIntro
+        Tak umožňuje bez nutnosti více vláken obsloužit až tisíce
+        souběžných spojení. Pro Node bylo vytvořeno velké množství
+        různých frameworků (např. \emph{Express.js} využívané pro REST API,
+        \emph{NestJS} určené pro strukturované aplikace, Koa, Fastify aj.).
+        Dle průzkumu StackOverflow z roku 2024 byl Node.js nejpoužívanější
+        webovou technologií, kterou využívalo okolo 40,7~\% profesionálních
+        vývojářl. %Ref: GPT/SOSurvey
+    \item \textbf{Python} je oblíbený nástroj pro rychlý vývoj, díky
+        čitelnému kódu a silným knihovnám pro databáze a statistické
+        využití. NEjznámějšími frameworky vyvíjené v Pythonu jsou
+        \emph{Django}, které je full-stack frameworkem s ORM a je vhodné
+        pro ryhlé prototypování, a \emph{Flask}, který je mikroframeworkem
+        a je flexibilní pro služby menší velikosti. Dle statistik průzkumu
+        StackOverflow z roku 2024 používá Django okolo 11,4~\% vývojářů,
+        zatímco Flask si vybralo zhruba 11,6~\% vývojářů. %Ref: GPT/SOSurvey
+        Python však na serveru bývá pomalejší oproti Go nebo Node, kvůli
+        čemuž se často kombinuje s vyrovnáváním zátěže, případně
+        asynchronními rozšířeními.
+    \item \textbf{Java/Kotlin} jsou díky stabilitě a výkonu v podnikovém
+        prostředí stále oblíbené. Hlavní platformou je \emph{Java EE/Spring}
+        (Spring Boot), což jsou robustní frameworky obsahující množství
+        různých modulů pro transace, zabezpečení a messaging. Spring Boot
+        dále umožňuje rychle konfigurovat servery s REST API. V současnosti
+        hlavně díky Androidu a serverovým knihovnám (díky Spring podpoře)
+        rychle roste \emph{Kotlin}. Spring Boot podle průzkumu StackOverflow
+        využívá okolo 14,2~\% vývojářů. %Ref: GPT/SOSurvey
+        Nevýhodou je především náročnější nasazení na JVM a větší spotřeba
+        paměti a výpočetního výkonu.
+    \item \textbf{C\#/.NET} jsou koncepty, které Microsoft poprvé
+        představil v roce 2002. Dnešní cross-platform verze nese název
+        \emph{ASP.NET Core} a představuje moderní rámec pro webové služby.
+        Jeho hlavními výhodami jsou vysoká integrace s Microsoft ekosystémem
+        a dobrý výkon. Dle průzkumu StackOverflow .NET Core používá
+        zhruba 19,1~\% vývojářů. %Ref: GPT/SOSurvey
+        Nevýhodou může být zejména nutnost spravovat CLR, někdy také
+        vyšší náročnost na spotřebu paměti.
+    \item \textbf{Dalšími jazyky} jsou např. \emph{Go}, které se díky
+        jednoduchosti a vysoce konkurenčnímu běhu používá pro microservices
+        nebo \emph{Rust}, který do vývojářských nástrojů proniká díky
+        bezpečnému a vysoce výkonnému kódu (používají ho např. frameworky
+        Actix nebo Rocket). Méně časté, ale stále přítomné jsou
+        \emph{Ruby/Ruby on Rails}, který byl kdysi na vrcholu, ale nyní
+        v popularitě zaostává, nebo \emph{PHP}, které se současnými
+        frameworky stále silně zůstává v CMS ekosystému.
 \end{itemize}
 
-Pro mé účely porovnávače cen PHM jsem se rozhodl využít kromě
-nejdůležitějších součástí také mapové podklady a databázi.
+Dle údajů používaných technologií z průzkumu StackOverflow z roku 2024
+jsou mezi backendovými frameworky kromě Node.js populární také Spring
+Boot, ASP.NET Core, Django a Flask. Node.js dle průzkumu využívá zhruba
+40~\% vývojářů a React frontend používá 41~\%. Laravel běžící na PHP
+má zastoupení okolo 8,6~\% a Ruby on Rails pouhých 5~\%. Tyto trendy
+potvzují, že vývojáři si v současnosti často vybírají více moderní
+a aktivně udržované nástroje, které mají velkou komunitu.
 
-\section{Procházení webu a dolování dat}
-% Problematika týkající se dolování dat z webů čerpacích stanic
+Co se týče výhod a nevýhod, lze říct, že dynamické jazyky (JS/Node,
+Python, Ruby, PHP) umožňují rychlý vývoj, ale díky interpretované
+podobě mohou mít nižší výkon. Naproti tomu kompilované jazyky
+(Java/Kotlin, C\#, Go, Rust) nabízejí od základu vyšší průchodnost,
+efektivní spouštění kódu a kontrolu datových typů, ale někdy díky
+tomu zpomalují vývoj. Frameworky, jako jsou Spring nebo ASP.NET,
+jsou robustní a díky své vysoké spolehlivosti vhodné pro korporátní
+využití, %Ref: GPT/SOSurvey
+zatímco mikroframworky (Flask, Express) jsou snadnější k pochopení,
+ale vyžadují více tvorby vlastních vestavěných knihoven v aplikaci.
+Volba technologie je silně závislá na velikosti projektu, jeho
+požadavcích na výkon či škálovatelnost a znalostech vývojářského
+týmu.
 
-\section{Mapy a ostatní API}
-% Problematika týkající se zpracování a zobrazení dat mimo jiné také na mapě
-% Výběr API pro danou problematiku
+\section{Databáze}
+
+% TODO: Doplnění informací od databázích
+
+\section{API}
+
+% TODO: Doplnění informací od API (REST/SOAP/GraphQL)
+
+\section{Webové crawlery}
+
+% TODO: Doplnění informací o webových crawlerech
 
 \endinput

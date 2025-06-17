@@ -1,0 +1,21 @@
+\chapter{Datové struktury}
+
+\begin{longtable}{|l|c|c|c|l|} 
+    \caption{Struktura tabulky petrolscan\_data} \label{tab:petrolscan_data-structure} \\
+    \hline \multicolumn{1}{|c|}{\textbf{Sloupec}} & \multicolumn{1}{|c|}{\textbf{Typ}} & \multicolumn{1}{|c|}{\textbf{Prázdný}} & \multicolumn{1}{|c|}{\textbf{Výchozí}} & \multicolumn{1}{|c|}{\textbf{Komentáře}} \\ \hline \hline
+\endfirsthead
+    \caption{Struktura tabulky petrolscan\_data (pokračování)} \\ 
+    \hline \multicolumn{1}{|c|}{\textbf{Sloupec}} & \multicolumn{1}{|c|}{\textbf{Typ}} & \multicolumn{1}{|c|}{\textbf{Prázdný}} & \multicolumn{1}{|c|}{\textbf{Výchozí}} & \multicolumn{1}{|c|}{\textbf{Komentáře}} \\ \hline \hline \endhead \endfoot 
+    \textbf{\textit{id}} & int(11) & Ne &  \\ \hline 
+    timestamp & timestamp & Ne & current\_timestamp() \\ \hline 
+    station\_name & varchar(255) & Ne &  \\ \hline 
+    station\_loc\_name & varchar(255) & Ne &  \\ \hline 
+    station\_loc\_lat & double & Ne &  \\ \hline 
+    station\_loc\_lon & double & Ne &  \\ \hline 
+    fuel\_type & varchar(255) & Ne &  \\ \hline 
+    fuel\_quality & varchar(255) & Ano & NULL \\ \hline 
+    fuel\_name & varchar(255) & Ne &  \\ \hline 
+    fuel\_price & float & Ne &  \\ \hline 
+\end{longtable}
+
+\endinput

@@ -1,0 +1,38 @@
+# ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN
+group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel
+state UP group default qlen 1000
+    link/ether 00:50:56:ad:97:78 brd ff:ff:ff:ff:ff:ff
+    altname enp2s1
+    inet 158.196.109.64/24 brd 158.196.109.255 scope global dynamic
+noprefixroute ens33
+       valid_lft 55961sec preferred_lft 55961sec
+    inet6 fe80::250:56ff:fead:9778/64 scope link noprefixroute
+       valid_lft forever preferred_lft forever
+# ip -6 addr add 2001:718:1001:207::64/64 dev ens33
+# ip -6 route add default via 2001:718:1001:207::1 dev ens33
+# ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN
+group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel
+state UP group default qlen 1000
+    link/ether 00:50:56:ad:97:78 brd ff:ff:ff:ff:ff:ff
+    altname enp2s1
+    inet 158.196.109.64/24 brd 158.196.109.255 scope global dynamic
+noprefixroute ens33
+       valid_lft 55961sec preferred_lft 55961sec
+    inet6 2001:718:1001:207::64/64 scope global
+       valid_lft forever preferred_lft forever
+    inet6 fe80::250:56ff:fead:9778/64 scope link noprefixroute
+       valid_lft forever preferred_lft forever,
