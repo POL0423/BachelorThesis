@@ -1,9 +1,52 @@
-\chapter{Příprava}
-Pro provoz webové aplikace je zapotřebí backend server.
-Pro tento účel jsem zvolil ICT centrum VŠB-TUO, kde jsem si nechal
+\chapter{Návrh a příprava technického řešení}
+\label{ch:design-and-prepaparions}
+
+V této kapitole se zabývám návrhem a přípravou technického řešení
+aplikace. Pro provoz webové aplikace je zapotřebí backend server.
+Pro tento účel jsem zvolil ICT datacentrum VŠB-TUO, kde jsem si nechal
 vytvořit virtuální server.
 
-\section{Operační systém a konfigurace DNS}
+\section{Návrh technického řešení aplikace}
+\label{sec:technical-design}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{Figures/structure.eps}
+    \caption{Návrhový diagram technického řešení aplikace}
+    \label{fig:structure-diagram}
+\end{figure}
+
+Jak můžete vidět na přiloženém diagramu v obrázku \ref{fig:structure-diagram}
+na stránce \pageref{fig:structure-diagram}, návrh technického řešení
+je rozdělen na hlavní software a kontejnerovou část, která obsahuje
+3 kontejnery. Crawler a databáze jsou součástí backendu, který je pomocí
+databáze propojen s frontendem.
+
+Hlavním softwarem je operační systém \emph{Linux}, na němž běží
+kontejnerizační SW \emph{Docker} a dále webserverový SW \emph{Nginx}.
+Docker poskytuje prostředí pro 3 kontejnerizované služby:
+
+\begin{itemize}
+    \item \textbf{Crawler:} Aktivní část backendu, která periodicky
+        prohledává weby čerpacích stanic a zjišťuje aktuální ceny
+        pohonných hmot, které následně zapisuje do databáze.
+    \item \textbf{Databáze:} pasivní část backendu, která uchovává
+        zaznamenané informace o PHM (typ, kvalita, název, cena)
+        daných ČS.
+    \item \textbf{Frontend:} Uživatelské prostředí aplikace, které
+        zprostředkovává uživateli grafické rozhraní, ve kterém může
+        vyhledávat, řadit a filtrovat PHM a jejich ceny na základě
+        geografické lokace a maximálního okruhu.
+\end{itemize}
+
+Webservový SW Nginx poskytuje reverse proxy pro snadný přístup ke službě
+prostým zadáním domény do adresního řádku prohlížeče. Zamýšlené je použití
+SSL pro HTTPS a přesměrování nezabezpečeného portu HTTP na zabezpečený port
+HTTPS.
+
+\section{Příprava operačního systému a konfigurace DNS}
+\label{sec:os-preps-dns-config}
+
 Jako operační systém serveru jsem zvolil Rocky Linux,
 který mi byl doporučen administrátory školní sítě. Tato linuxová
 distribuce je založena na RHEL. Součástí konfigurace VM je také
@@ -22,7 +65,9 @@ pol0423-stu.vsb.cz         A      7200  Answer     158.196.109.64
 DNS záznam AAAA je vazba na IPv6 adresu, zatímco DNS záznam A
 je vazba na IPv4.
 
-\section{Instalace OS a počáteční konfigurace serveru}
+\subsection{Instalace OS a počáteční konfigurace sítě serveru}
+\label{sec:os-installation-initial-server-network-config}
+
 Server se nachází na VMware vSphere serveru, dostupný
 na adrese vcs.vsb.cz. Prvním krokem byla instalace OS Rocky Linux,
 která proběhla přes virtuální konzoli serveru. Instalační program
@@ -122,7 +167,9 @@ Last login: Sun Mar  2 19:21:04 2025 from 2001:718:1001:698:99e2:f1ff:4e67:7618
 [marpolda@pol0423-stu ~]$
 \end{verbatim}
 
-\section{Kontejnerizace a instalace služeb}
+\section{Příprava kontejnerizace a instalace služeb}
+\label{sec:containers-preps-services-install}
+
 Nyní, když máme nastavený základní přístup, můžeme přistoupit
 k instalaci softwaru pro kontejnerizaci a samotných kontejnerů
 potřebných služeb. Pro kontejnerizaci jsem si vybral Docker,
@@ -156,9 +203,14 @@ Vyvíjené součásti aplikace jsou:
 \end{itemize}
 
 \subsection{Výběr softwaru pro crawler}
+\label{sec:crawler-solutions}
 
 Jako první jsem se rozhodl najít vhodné self-hosted webové crawlery
-a scrapery. Na dotaz k vyhledávání mi ChatGPT našlo následující možnosti:
+a scrapery. Crawlerům se v teorii věnuji v sekci \ref{sec:research-crawlers}
+v kapitole \ref{ch:initial-research}
+na stránce \pageref{sec:research-crawlers}. Na dotaz k vyhledávání
+mi ChatGPT \cite{givNscvAOqB1nMpq} %Ref: GPTCrawlers
+našel následující možnosti:
 
 \begin{itemize}
     \item Crawlee
@@ -169,6 +221,7 @@ a scrapery. Na dotaz k vyhledávání mi ChatGPT našlo následující možnosti
 Rozhodl jsem se pro Crawlee.
 
 \subsubsection{Zkouška Crawlee}
+\label{sec:crawlee-trial}
 
 Tento crawler funguje v Node.js, a nabízí jednoduchou instalaci pomocí
 jednoduchého příkazu. Crawler simuluje procházení webu člověkem pomocí
@@ -185,6 +238,7 @@ Docker image, který se jen posléze nahraje na Docker Hub a lze s ním
 dále pracovat.
 
 \subsubsection{Tvorba crawleru}
+\label{sec:crawler-preps}
 
 Nejprve je nutné prozkoumat webové stránky různých čerpacích stanic.
 Uvažujme tak tyto čerpací stanice:
@@ -211,6 +265,7 @@ do databáze strukturovaně podle typu jednotlivých PHM, jejich značce
 a umístění ČS.
 
 \subsubsection{Globus}
+\label{sec:preps-globus}
 
 Tato ČS patří velkoobchodnímu řetězci (hypermarketu) stejného jména
 a nachází se výhradně vždy v blízkosti prodejny. Globus lze v době
@@ -258,6 +313,7 @@ vytvořit pro každý web jeho vlastní crawler. K tomu lze využít threading
 v Node.js.
 
 \subsubsection{ONO}
+\label{sec:preps-ono}
 
 ČS ONO jsou v samostatné síti ČS provozované společností Tank ONO s.r.o.
 Web se nachází na adrese \url{www.tank-ono.cz}, který je velmi jednoduchý
@@ -278,14 +334,13 @@ a přehledný. Postup k získání informací z ČS je následující:
         cen v Kč (c) a eurech. Toto jsou data, která nás zajímají.
 \end{enumerate}
 
-\newpage
-
-\begin{table}[]
+\begin{table}[h]
     \centering
     \caption{Seznam ČS ONO}
     \label{tab:tank-ono-pobocky}
     \begin{tabular}{r l|r l}
-        1.    & ČS Plzeň, Domažlická        & 24.   & ČS Sukorady u Mladé Boleslavi\\
+        1.    & ČS Plzeň, Domažlická        & 24.   & ČS Sukorady u Mladé
+                                                        Boleslavi\\
         2.    & ČS Nýřany                   & 25.   & ČS Podolí u Písku\\
         3.    & ČS Plzeň, Studentská        & 26.   & ČS Planá nad Lužnicí\\
         4.    & ČS Sokolov                  & 27.   & ČS Spytihněv\\
@@ -304,7 +359,8 @@ a přehledný. Postup k získání informací z ČS je následující:
         17.   & ČS Kbelnice                 & 40.   & ČS Dobkovice u Děčína\\
         18.   & ČS Havlovice u Domažlic     & 41.   & ČS Březno u Loun D7\\
         19.   & ČS Mělník                   & 42.   & ČS Brno-Hviezdoslavova\\
-        20.   & ČS Krupá u Rakovníka        & 43.   & ČS Studénka - D1 exit 336\\
+        20.   & ČS Krupá u Rakovníka        & 43.   & ČS Studénka - D1
+                                                        exit 336\\
         21.   & ČS Dolní Dvořiště - ONO I   & 44.   & ČS Ostrov nad Ohří\\
         22.   & ČS Dolní Dvořiště - ONO II  & 45.   & ČS Chlumčany u Přeštic\\
         23.   & ČS Církvice u Kutné Hory
@@ -312,6 +368,7 @@ a přehledný. Postup k získání informací z ČS je následující:
 \end{table}
 
 \subsubsection{Vyřazené čerpací stanice}
+\label{sec:preps-removed-stations}
 
 Během analýzy zmíněných webů ČS jsem zjistil, že právě pouze Globus
 a ONO poskytují ceny PHM. Následující weby řetězců ČS jsem musel
@@ -339,36 +396,37 @@ z projektu vyřadit, neboť nesplňují požadavky k dolování dat.
         již nezbýval dostatek času.
 \end{itemize}
 
-\subsubsection{Threading a strukturizace crawleru}
+\subsubsection{Návrh strukturizace crawleru}
+\label{sec:preps-crawler-structure}
 
-V datové příloze a také na webové stránce
-\texttt{\url{github.com/POL0423/petrolscan-crawler}} lze vidět zdrojový
-kód crawleru. Součástí tohoto zdrojového kódu je soubor \texttt{Dockerfile},
-který definuje obrázek pro Docker kontejner. Lze si jej představit jako jakousi
-předlohu pro souborový systém uvnitř kontejneru. Crawler je rozdělen na několik
-částí, která každá plní svou specifickou úlohu:
+Pro snazší vývoj a lepší údržbu aplikace je potřeba ji rozdělit na jednotlivé
+části, které plní své specifické úlohy.
 
 \begin{itemize}
-    \item \textbf{Hlavní část:} Tuto část představuje soubor \texttt{src/main.ts}.
-        Jedná se o hlavní spouštěcí kód, který volá další moduly.
-    \item \textbf{Dílčí crawlery:} Tyto části provádějí samotnou sklizeň. Jedná se
-        o samotnou implementaci logiky dílčích crawlerů. To jsou dva moduly: Globus
-        a ONO. Oba tyto moduly mají společný nadřazený abstraktní modul, který
-        definuje společné vlastnosti a metody těchto modulů.
+    \item \textbf{Hlavní část:} Jedná se o hlavní spouštěcí kód, který volá
+        další moduly.
+    \item \textbf{Dílčí crawlery:} Tyto části provádějí samotnou sklizeň.
+        Jedná se o samotnou implementaci logiky dílčích crawlerů. To jsou
+        dva moduly: Globus a ONO. Oba tyto moduly mají společný nadřazený
+        abstraktní modul, který definuje společné vlastnosti a metody
+        těchto modulů.
     \item \textbf{Databázová spojka:} Tato část propojuje crawlery s databází
         a umožňuje jim do databáze zapisovat nasbíraná data.
-    \item \textbf{Definice datových typů:} V této části definuji některé datové
-        typy, které dílčí crawlery používají. Datové typy jsou definovány kvůli
-        snadnější identifikaci a implementaci práce s informacemi.
-    \item \textbf{Crontab:} Hlavní spouštěcí kód je definován jako index
-        v souboru \texttt{package.json}. V souboru \texttt{scripts/run\_cron.sh}
-        je definován příkaz ke spuštění tohoto hlavního spouštěcího kódu. Tento
-        soubor je poté odkazován souborem \texttt{scripts/jobs.crontab},
-        který tento skript periodicky spouští každý den ve 3:00 a zajišťuje
-        zapisování výstupu konzole do logovacího souboru.
+    \item \textbf{Definice datových typů:} V této části definuji některé
+        datové typy, které dílčí crawlery používají. Datové typy jsou
+        definovány kvůli snadnější identifikaci a implementaci práce
+        s informacemi.
+    \item \textbf{Crontab:} Jedná se o skript, který periodicky každý den
+        ve 3:00 spouští crawler a zajišťuje zapisování výstupu konzole
+        do logovacího souboru.
 \end{itemize}
 
 \subsection{Databáze}
+\label{sec:preps-db}
+
+Databázím se podrobně věnuji v teoretickém rozboru
+v sekci \ref{sec:research-db} kapitoly \ref{ch:initial-research}
+na stránce \pageref{sec:research-db}.
 
 Pokud je crawler mozkem aplikace, který vyhledává data a ukládá je,
 pak databáze je určitě srdcem celé aplikace, protože umožňuje její fungování.
@@ -381,9 +439,9 @@ softwarů. Především bych vyjmenoval následující možnosti:
         kompatibilita s různými softwary pro backend i frontend. MySQL
         je k dispozici ve více variantách:
         \begin{enumerate}
-            \item \textbf{Oracle:} Originální verze MySQL, která je stále
+            \item \textbf{MySQL:} Originální verze MySQL, která je stále
                 aktivně vyvíjená. Tuto verzi lze najít na většině komerčních
-                serverů.
+                serverů. Dnes vlastněná společností Oracle.
             \item \textbf{MariaDB:} Jedná se o fork originální verze MySQL
                 (fork znamená, že se jedná o verzi odvozenou z původní).
                 V dnešní době pro většinu menších projektů příjemná
@@ -406,6 +464,11 @@ vydláždil cestu jeho nástupcům. MySQL používá SQL pro komunikaci s aplika
 což je strukturovaný dotazovací jazyk nápadně podobný angličtině.
 
 \subsection{Frontend}
+\label{sec:preps-frontend}
+
+Podrobně se frontendům věnuji v teoretickém rozboru
+v sekci \ref{sec:research-frontend} kapitoly \ref{ch:initial-research}
+na stránce \pageref{sec:research-frontend}.
 
 Frontend je tváří celé aplikace. Jedná se o tu část aplikace, kterou vidí
 její uživatel. Tato část zpracovává data z databáze a zprostředkovává je
@@ -426,9 +489,10 @@ na internetu široce používané. Vyjmenoval bych zejména tyto nejpoužívaně
         nyní obohacená o jednoduchou formu programování na webu. JavaScript
         nabízí možnosti, jak stránku doplnit o různé efekty a interaktivitu,
         a umožňuje jednoduché algoritmizační úkony. Výhodou je jednoduchost
-        a jistá forma interaktivizace. Nevýhodou je fakt, že veškerý programový
-        kód aplikace běží v počítači uživatele, a tak není možné pracovat
-        s databází na serveru, aniž by došlo k úniku autentizačních údajů.
+        a jistá forma interaktivizace. Nevýhodou je fakt, že veškerý
+        programový kód aplikace běží v počítači uživatele, a tak není možné
+        pracovat s databází na serveru, aniž by došlo k úniku autentizačních
+        údajů.
     \item \textbf{PHP:} Jedná se o doplňkový software v současnosti nejvíce
         využívaný společně s webovým serverem Apache a Nginx, a zároveň
         se jedná o programovací jazyk, ve kterém jsou psané webové aplikace.
@@ -455,26 +519,26 @@ na internetu široce používané. Vyjmenoval bych zejména tyto nejpoužívaně
         způsob poskytování webového obsahu. Toto jsou nejpoužívanější
         frameworky:
         \begin{itemize}
-            \item \textbf{React:} Základní průkopník moderního webu. Od tohoto
-                frameworku jsou odvozené všechny další dnes nejpoužívanější
-                frameworky.
-            \item \textbf{Next.js:} Moderní React framework vyvíjený společností
-                Vercel. Výhodou je jednoduchost použití a nativní inkluze
-                moderních CSS frameworků, jako např. Tailwind CSS nebo CSS
-                Modules.
-            \item \textbf{Vue.js:} Konkurenční React framework oproti Next.js.
+            \item \textbf{React:} Základní průkopník moderního webu.
+                Jedná se o knihovnu, která položila základy moderního
+                webu a vytvořila koncept webového serveru v JavaScriptu.
+            \item \textbf{Next.js:} Moderní React framework vyvíjený
+                společností Vercel. Výhodou je jednoduchost použití
+                a nativní inkluze moderních CSS frameworků, jako např.
+                Tailwind CSS nebo CSS Modules.
+            \item \textbf{Vue.js:} Konkurenční framework oproti Next.js.
                 Jedná se o progresivní framework, který poskytuje jednoduché
                 vývojářské nástroje pro frontend.
-            \item \textbf{Nuxt.js:} Odvozený z Vue.js, doplňuje jej o full-stack
-                nástroje, lze jej tedy využít i jako backend.
+            \item \textbf{Nuxt.js:} Odvozený z Vue.js, doplňuje jej
+                o full-stack nástroje, lze jej tedy využít i jako backend.
         \end{itemize}
 \end{itemize}
 
 Pro mou aplikaci jsem se rozhodl využít Node.js s využitím frameworku Next.js.
-S Node.js již mám nějaké předchozí zkušenosti, JavaScript je poměrně jednoduchý
-programovací jazyk, z něj odvozený TypeScript navíc přidává jednoduché
-zabezpečení aplikace z hlediska datových typů. Next.js se mi jeví jako optimální
-volba, vzhledem k jednoduchosti a dostupnosti různých předpřipravených nástrojů
-pro rychlý webový design.
+S Node.js již mám nějaké předchozí zkušenosti, JavaScript je poměrně
+jednoduchý programovací jazyk, z něj odvozený TypeScript navíc přidává
+jednoduché zabezpečení aplikace z hlediska datových typů. Next.js se mi jeví
+jako optimální volba, vzhledem k jednoduchosti a dostupnosti různých
+předpřipravených nástrojů pro rychlý webový design.
 
 \endinput

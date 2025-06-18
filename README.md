@@ -1,7 +1,7 @@
 # Bakalářská práce
 
 Toto je má bakalářská práce na téma „*Webová aplikace pro porovnání
-cen PHM*“. Téma bakalářké práce jsem si zvolil sám, vedoucím této
+cen PHM*“. Téma bakalářské práce jsem si zvolil sám, vedoucím této
 bakalářské práce je p. prof. Ing. Miroslav Vozňák, Ph.D. Práce je
 vypracovávána v českém jazyce.
 

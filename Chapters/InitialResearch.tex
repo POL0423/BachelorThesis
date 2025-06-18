@@ -1,4 +1,9 @@
 \chapter{Technologie pro návrh webových aplikací}
+\label{ch:initial-research}
+
+Tato kapitola se popisuje technologie pro návrh webových aplikací, 
+porovnává je, hodnotí výhody a nevýhody a zabývá se vhodným použitím
+jednotlivých technologií podle potřeb vývojáře.
 
 Webové aplikace jsou složené z různých vrstev a součástí, které každá
 využívá různé technologie, ať už se jedná o uživatelské rozhraní (frontend),
@@ -7,9 +12,10 @@ rozhraní, které je propojuje mezi sebou (API) nebo pomocné nástroje,
 jako jsou například webové crawlery, které prohledávají web a stahují
 webový obsah. Základem k tvorbě webové aplikace je porozumění jednotlivým
 součástem a technologiím pro informovanou volbu a implementaci.
-% Ref: ChatGPT konverzace
+\cite{YHVfLHsNlUItkF6G} %Ref: GPT
 
 \section{Frontend}
+\label{sec:research-frontend}
 
 V začátcích webu se webové stránky tvořily jen pomocí statického HTML a CSS,
 které byly začátkem 90. let standardizovány. Postupně byla funkce doplněna
@@ -17,9 +23,11 @@ o JavaScript, který přidal možnost interaktivity. Vznikaly první JS knihovny
 které přinášely ještě více funkcí. Jednou z takových starších knihoven
 je např. \emph{jQuery}, která zavedla jednoduchou manipulaci s DOM.
 Komunitní průzkum StackOverflow z roku 2024 ukazuje, že jQuery v té době
-stále používalo kolem 22~\% profesionálních vývojářů. %Ref: GPT/SOSurvey
+stále používalo kolem 22~\% profesionálních vývojářů
+\cite{YHVfLHsNlUItkF6G,w6F4OYb0neliWLGP}. %Ref: GPT/SOSurvey
 Ke stylizované podobě webových stránek se ve velké míře využívaly CSS
-frameworky, jakým je např. \emph{Bootstrap} (2011) nebo \emph{Foundation},
+frameworky, jakým je např. \emph{Bootstrap} (2011) nebo \emph{Foundation}
+\cite{YHVfLHsNlUItkF6G,Nsz2b52zS5s0JglP}, %Ref: GPT/StateOfCSS
 které obsahují hotové šablony a mřížkové systémy k tvorbě snadného mobilního
 designu. Jejich velkou nevýhodou je však zvětšování objemu přenášených dat.
 
@@ -30,33 +38,34 @@ který byl v roce 2013 vytvořen společností Facebook (dnes Meta), dále
 mohou vývojáři využít ve svých aplikacích \emph{Angular}, který v roce
 2016 poprvé představila společnost Google, a následuje \emph{Vue.js},
 který je vývojářům k dispozici od roku 2014 díky společnosti Evan You.
-%Ref: GPT/BrowserStack(R/A/V)
+\cite{YHVfLHsNlUItkF6G,1WL9hIh67tHjtVTy} %Ref: GPT/BrowserStack
 
 React přišel s konceptem virtuálního DOM, čímž zvyšuje výkon a umožňuje
 definici opakovaně použitelných komponent, čímž zjednodušuje údržbu
-a škálovatelnost kódu aplikace. %Ref: GPT/BrowserStack(R/A/V)
-Angular je plnohodnotným frameworkem, který poskytuje rozsáhlý ekosystém
-vestavěných modulů (např. HTTP, routing, aj.), a díky tomu je považován
-za vhodný pro velké podnikové aplikace. Nevýhodou je nutná znalost
-TypeScriptu, což začínajícím vývojářům ztěžuje jejich aklimatizaci
-do tohoto prostředí. %Ref: GPT/BrowserStack(R/A/V)
-Vue.js sází na modularitu. Aplikaci vytvořenou ve Vue.js lze nasadit
-postupně a je méně náročná na výchozí konfiguraci. Vue.js má rovněž
-poměrně silnou komunitu. %Ref: GPT/BrowserStack(R/A/V)
+a škálovatelnost kódu aplikace. Angular je plnohodnotným frameworkem, který
+poskytuje rozsáhlý ekosystém vestavěných modulů (např. HTTP, routing, aj.),
+a díky tomu je považován za vhodný pro velké podnikové aplikace. Nevýhodou
+je nutná znalost TypeScriptu, což začínajícím vývojářům ztěžuje jejich
+aklimatizaci do tohoto prostředí. Vue.js sází na modularitu. Aplikaci
+vytvořenou ve Vue.js lze nasadit postupně a je méně náročná na výchozí
+konfiguraci. Vue.js má rovněž poměrně silnou komunitu.
+\cite{YHVfLHsNlUItkF6G,1WL9hIh67tHjtVTy} %Ref: GPT/BrowserStack
 
 Různé průzkumy odráží popularitu těchto nástrojů. Dle průzkumu StackOverflow
-z roku 2024 React použilo kole 41,6~\% profesionálních vývojářů, zatímco
+z roku 2024 React použilo kolem 41,6~\% profesionálních vývojářů, zatímco
 na Angular si sáhlo 19,4~\%. U studentů nebo začínajících vývojářů se podíly
-snižují a obrací. %Ref: GPT/SOSurvey
+snižují a obrací \cite{YHVfLHsNlUItkF6G,w6F4OYb0neliWLGP}. %Ref: GPT/SOSurvey
 Jiné zdroje obsahují podobné výsledky. React pohánělo v dubnu 2025
 přes 34 milionů webů, Vue.js zvolili vývojáři 3,7 milionu webů a Angular
-je motorem pouhých 96 tisc webů. %Ref: GPT/BrowserStack(R/A/V)
+je motorem pouhých 96 tisíc webů \cite{YHVfLHsNlUItkF6G,1WL9hIh67tHjtVTy}.
+%Ref: GPT/BrowserStack
 
 Za zmínku stojí také kompilovaný framework \emph{Svelte}, který
 má minimální overhead, a standardizovaná knihovna \emph{Web Components},
 která implementuje vlastní HTML prvky.
 
 \subsection{Srovnání výhod a nevýhod}
+\label{sec:frontend-advatages-disadvantages}
 
 \begin{itemize}
     \item \textbf{React} má velkou komunitní podporu a rozsáhlý ekosystém
@@ -67,7 +76,8 @@ která implementuje vlastní HTML prvky.
         \begin{itemize}
             \item \textbf{Výhodou} jsou především rychlé aktualizace
                 pomocí virtuálního DOM a přehledná komponentní
-                architektura. %Ref: GPT/BrowserStack(R/A/V)
+                architektura. \cite{YHVfLHsNlUItkF6G,1WL9hIh67tHjtVTy}
+                %Ref: GPT/BrowserStack
             \item \textbf{Nevýhodou} může být nutnost učit se JSX syntaxi
                 a časté změny v knihovně a ekosystému.
         \end{itemize}
@@ -75,23 +85,30 @@ která implementuje vlastní HTML prvky.
         k tomu kompletní rámec nástrojů. Od základu nabízí silnou kontrolu
         správných datových typů prostřednictvím TypeScriptu, nástroje
         typu \emph{Dependency Injection} a rozsáhlou dokumentaci.
-        %Ref: GPT/BrowserStack(R/A/V)
+        \cite{YHVfLHsNlUItkF6G,1WL9hIh67tHjtVTy} %Ref: GPT/BrowserStack
 
         \begin{itemize}
             \item \textbf{Výhodou} je vhodné použití pro velké týmy
                 a složité aplikace, které jsou průmyslového charakteru.
+                \cite{YHVfLHsNlUItkF6G,1WL9hIh67tHjtVTy}
+                %Ref: GPT/BrowserStack
             \item \textbf{Nevýhodou} je naproti tomu složitost a množství
                 konceptů (zejména směrování, moduly a služby), které
-                zvyšují náročnost vývoje. %Ref: GPT/BrowserStack(R/A/V)
+                zvyšují náročnost vývoje.
+                \cite{YHVfLHsNlUItkF6G,1WL9hIh67tHjtVTy}
+                %Ref: GPT/BrowserStack
         \end{itemize}
     \item \textbf{Vue} je lehčí na pochopení a hodí se i pro menší projekty.
 
         \begin{itemize}
             \item \textbf{Výhodou} je všestrannost, podporuje rychlý start
                 i postupné rozšiřování aplikace.
+                \cite{YHVfLHsNlUItkF6G,1WL9hIh67tHjtVTy}
+                %Ref: GPT/BrowserStack
             \item \textbf{Nevýhodou} je menší tržní podíl oproti Reactu
                 a Angularu, což se odráží ve velikosti ekosystému knihoven.
-                %Ref: GPT/BrowserStack(R/A/V)
+                \cite{YHVfLHsNlUItkF6G,1WL9hIh67tHjtVTy}
+                %Ref: GPT/BrowserStack
         \end{itemize}
     \item \textbf{Další knihovny} (např. Svelte, Alpine, Lit, apod.)
         stále rostou v oblibě díky svému výkonu. Svelte toho dosahuje
@@ -109,9 +126,10 @@ považují za service workery. Dále se uplatňují koncepty SSR či SSG (Next.j
 které zlepšují SEO a zrychlují načítání. Veškeré tyto volby závisí
 na konkrétních potřebách aplikace a týmu, který ji vytváří. Dnes vývojáři
 zpravidla volí moderní JS/TS nástroje, zejména React, Angular nebo Vue,
-pro nové projekty. %Ref: GPT
+pro nové projekty.
 
 \section{Backend}
+\label{sec:research-backend}
 
 Backend tradičně zajišťovaly skriptovací jazyky a aplikační servery,
 které existují již od začátku 90. let a stále se ve velké míře používají
@@ -130,26 +148,27 @@ přechází na jazykové frameworky, které umožňují rychlý vývoj a dobrou
 škálovatelnost.
 
 \begin{itemize}
-    \item \textbf{Node.js/JS} umožňuje spouštět JS kód na serveru.
-        %Ref: GPT/NodeIntro
+    \item \textbf{Node.js/JS} umožňuje spouštět JS kód na serveru
+        \cite{YHVfLHsNlUItkF6G, kbr6yxw1ew4wJS2e}. %Ref: GPT/Node
         Jedná se o otevřené prostředí založené na V8 enginu z prohlížeče
         Chrome, které efektivně zpracovává I/O v jednovlánové smyčce
-        událostí. %Ref: GPT/NodeIntro
+        událostí \cite{YHVfLHsNlUItkF6G,kbr6yxw1ew4wJS2e}. %Ref: GPT/Node
         Tak umožňuje bez nutnosti více vláken obsloužit až tisíce
         souběžných spojení. Pro Node bylo vytvořeno velké množství
         různých frameworků (např. \emph{Express.js} využívané pro REST API,
         \emph{NestJS} určené pro strukturované aplikace, Koa, Fastify aj.).
         Dle průzkumu StackOverflow z roku 2024 byl Node.js nejpoužívanější
         webovou technologií, kterou využívalo okolo 40,7~\% profesionálních
-        vývojářl. %Ref: GPT/SOSurvey
+        vývojářů \cite{YHVfLHsNlUItkF6G,w6F4OYb0neliWLGP}. %Ref: GPT/SOSurvey
     \item \textbf{Python} je oblíbený nástroj pro rychlý vývoj, díky
         čitelnému kódu a silným knihovnám pro databáze a statistické
-        využití. NEjznámějšími frameworky vyvíjené v Pythonu jsou
+        využití. Nejznámějšími frameworky vyvíjenými v Pythonu jsou
         \emph{Django}, které je full-stack frameworkem s ORM a je vhodné
         pro ryhlé prototypování, a \emph{Flask}, který je mikroframeworkem
         a je flexibilní pro služby menší velikosti. Dle statistik průzkumu
         StackOverflow z roku 2024 používá Django okolo 11,4~\% vývojářů,
-        zatímco Flask si vybralo zhruba 11,6~\% vývojářů. %Ref: GPT/SOSurvey
+        zatímco Flask si vybralo zhruba 11,6~\% vývojářů
+        \cite{YHVfLHsNlUItkF6G,w6F4OYb0neliWLGP}. %Ref: GPT/SOSurvey
         Python však na serveru bývá pomalejší oproti Go nebo Node, kvůli
         čemuž se často kombinuje s vyrovnáváním zátěže, případně
         asynchronními rozšířeními.
@@ -160,7 +179,8 @@ přechází na jazykové frameworky, které umožňují rychlý vývoj a dobrou
         dále umožňuje rychle konfigurovat servery s REST API. V současnosti
         hlavně díky Androidu a serverovým knihovnám (díky Spring podpoře)
         rychle roste \emph{Kotlin}. Spring Boot podle průzkumu StackOverflow
-        využívá okolo 14,2~\% vývojářů. %Ref: GPT/SOSurvey
+        využívá okolo 14,2~\% vývojářů
+        \cite{YHVfLHsNlUItkF6G,w6F4OYb0neliWLGP}. %Ref: GPT/SOSurvey
         Nevýhodou je především náročnější nasazení na JVM a větší spotřeba
         paměti a výpočetního výkonu.
     \item \textbf{C\#/.NET} jsou koncepty, které Microsoft poprvé
@@ -168,7 +188,8 @@ přechází na jazykové frameworky, které umožňují rychlý vývoj a dobrou
         \emph{ASP.NET Core} a představuje moderní rámec pro webové služby.
         Jeho hlavními výhodami jsou vysoká integrace s Microsoft ekosystémem
         a dobrý výkon. Dle průzkumu StackOverflow .NET Core používá
-        zhruba 19,1~\% vývojářů. %Ref: GPT/SOSurvey
+        zhruba 19,1~\% vývojářů
+        \cite{YHVfLHsNlUItkF6G,w6F4OYb0neliWLGP}. %Ref: GPT/SOSurvey
         Nevýhodou může být zejména nutnost spravovat CLR, někdy také
         vyšší náročnost na spotřebu paměti.
     \item \textbf{Dalšími jazyky} jsou např. \emph{Go}, které se díky
@@ -188,31 +209,281 @@ Boot, ASP.NET Core, Django a Flask. Node.js dle průzkumu využívá zhruba
 má zastoupení okolo 8,6~\% a Ruby on Rails pouhých 5~\%. Tyto trendy
 potvzují, že vývojáři si v současnosti často vybírají více moderní
 a aktivně udržované nástroje, které mají velkou komunitu.
+\cite{YHVfLHsNlUItkF6G,w6F4OYb0neliWLGP} %Ref: GPT/SOSurvey
 
 Co se týče výhod a nevýhod, lze říct, že dynamické jazyky (JS/Node,
-Python, Ruby, PHP) umožňují rychlý vývoj, ale díky interpretované
+Python, Ruby či PHP) umožňují rychlý vývoj, ale díky interpretované
 podobě mohou mít nižší výkon. Naproti tomu kompilované jazyky
-(Java/Kotlin, C\#, Go, Rust) nabízejí od základu vyšší průchodnost,
+(Java/Kotlin, C\#, Go či Rust) nabízejí od základu vyšší průchodnost,
 efektivní spouštění kódu a kontrolu datových typů, ale někdy díky
 tomu zpomalují vývoj. Frameworky, jako jsou Spring nebo ASP.NET,
 jsou robustní a díky své vysoké spolehlivosti vhodné pro korporátní
-využití, %Ref: GPT/SOSurvey
-zatímco mikroframworky (Flask, Express) jsou snadnější k pochopení,
+využití \cite{YHVfLHsNlUItkF6G,w6F4OYb0neliWLGP}, %Ref: GPT/SOSurvey
+zatímco mikroframeworky (Flask či Express) jsou snadnější k pochopení,
 ale vyžadují více tvorby vlastních vestavěných knihoven v aplikaci.
 Volba technologie je silně závislá na velikosti projektu, jeho
 požadavcích na výkon či škálovatelnost a znalostech vývojářského
 týmu.
 
 \section{Databáze}
+\label{sec:research-db}
 
-% TODO: Doplnění informací od databázích
+Tradiční formou úložiště dat je relační databáze definující strukturovaná
+data v tabulkách, které mají pevně definované schéma. Příklady RDBMS mohou
+být \emph{MySQL}, \emph{PostgreSQL}, \emph{Oracle DB}, \emph{Microsoft
+SQL Server} nebo \emph{SQLite}. Tyto systémy zajišťují dobré ACID vlastnosti
+a mají dobrou podporu složitých SQL dotazů. Výhodou je silná integrita dat,
+která zahrnuje klíče a normalizaci, a inkluze standardních nástrojů
+pro zálohování. Nevýhody relačních databází spočívají ve škálovatelnosti.
+Data jsou škálována vertikálně v závislosti na výkonu hardwaru a podle
+rigidního schématu, kde změna datového modelu vyžaduje migraci dat.
+\cite{YHVfLHsNlUItkF6G,Fny73hg0lVaoqYAl} % Ref: GPT/MongoDB
+
+Modernější modely (někdy označované jako \emph{NoSQL} nebo
+\emph{multimodely}) se využívají pro velké objemy nestrukturovaných nebo
+rychle se měnících dat. Tyto systémy často umožňují i horizontální
+škálování. NoSQL databáze se dělí na:
+
+\begin{itemize}
+    \item \textbf{dokumentové,} které ukládají data do JSON objektů
+        (např. MongoDB nebo CouchDB);
+    \item \textbf{typu klíč-hodnota} používané pro jednoduché páry
+        (např. Redis);
+    \item \textbf{sloupcové} vhodné pro analytické využití
+        (např. Cassanda nebo HBase)
+    \item a \textbf{grafové} sloužící pro propojená data
+        (např. Neo4j či Amazon Neptune).
+\end{itemize}
+
+Tyto systémy mají flexibilní schéma umožňující měnit strukturu dat
+za běhu a vyšší dostupnost, jelikož jsou navržené pro cloud a horizontální
+replikaci \cite{YHVfLHsNlUItkF6G,Fny73hg0lVaoqYAl}. %Ref: GPT/MongoDB
+Silné ACID vlastnosti však často obětují za rychlost a škálovatelnost.
+NoSQL databáze vynikají v případech, kdy je nutné zohlednit vysokou
+propustnost nebo ukládat data, která mají volnější strukturu
+(např. neomezené sloupce či vnořené objekty). Kupříkladu MongoDB obsahuje
+vestavěnou podporu pro distribuci dat (tzv. sharding) a replikaci.
+Naproti tomu Redis nabízí extrémně rychlou cache párů typu klíč-hodnota.
+
+Žebříček DB-Engines z června roku 2025 popisuje popularitu databází,
+kde nejvyšší příčky obsadily databáze Oracle, MySQL, MS SQL Server
+a PostgreSQL, tedy tradiční RDBMS. Na 6. místě se nachází MongoDB,
+nejpopulárnější NoSQL databáze, která má robustní adopci, dále pak
+Redis, založené na typu klíč-hodnota, a ElasticSearch, které nabízí
+fulltextové vyhledávání. Grafové databáze (např. Neo4j) se na špičce
+žebříčku vyskytují, přestože jsou specifické určitým doménám
+(sociální sítě či doporučovací systémy). Vysoký nárůst nově zaznamenaly
+cloudové databáze, jako např. Snowflake nabízející datové sklady či služby
+typu Amazon DynamoDB, které nabízí databáze typu klíč-hodnota
+pro bezserverové architektury. \cite{YHVfLHsNlUItkF6G,gT0jW3Rz4pdfcjnO}
+%Ref: GPT/DBEngines
+
+Na další stránce (\pageref{tab:db-overview}) můžete vidět
+tabulku \ref{tab:db-overview}, která srovnává typy databází.
+
+\begin{table}
+    \caption{Srovnání typů databází}
+    \label{tab:db-overview}
+    \centering
+    \begin{tabular}{|p{.2\textwidth}|p{.15\textwidth}|p{.55\textwidth}|}
+        \hline
+        \thead{\textbf{Typ databáze}}
+            &   \thead{\textbf{Příklady}}
+            &   \thead{\textbf{Vlastnosti}}\\
+        \hline  \hline
+        Relační (SQL)
+            &   \parbox[t]{\textwidth}{MySQL,\\ PostgreSQL,\\ Oracle}
+            &   Ukládají data v tabulkách s pevnou stukturou
+                (označované jako schéma). Zaručují ACID transakce, které ručí
+                spolehlivostí a konzistencí. Jsou vhodné pro normalizovaná
+                data a složité relační dotazy. Jejich nevýhodou je méně
+                flexibilní schéma a škálovatelnost omezená na vertikální.
+                \cite{YHVfLHsNlUItkF6G,Fny73hg0lVaoqYAl}\\ %Ref: GPT/MongoDB
+        \hline
+        Dokumentová (NoSQL)
+            &   \parbox[t]{\textwidth}{MongoDB,\\ CouchDB,\\ Firestore}
+            &   Data se ukládají jako JSON nebo binární
+                dokumenty. Umožňují flexibilní schéma, dají se snadno horizontálně škálovat a jsou rychlé ve čtení i zápisu dat. Hodí se pro nestandardizovaná nebo rychle se měnící data.
+                \cite{YHVfLHsNlUItkF6G,Fny73hg0lVaoqYAl}\\ %Ref: GPT/MongoDB
+        \hline
+        Klíč-hodnota (NoSQL)
+            &   \parbox[t]{\textwidth}{Redis,\\ DynamoDB}
+            &   Extrémně jednoduchá úložiště, kde každý záznam je pár
+                typu klíč-hodnota. Podporují velmi rychlé operace
+                a jsou snadno škálovatelné. Často jsou používané jako
+                cache nebo pro ukládání jednoduchých stavů.\\
+        \hline
+        Sloupcové (NoSQL)
+            &   \parbox[t]{\textwidth}{Cassandra,\\ HBase}
+            &   Jsou optimalizované pro distribuci a analýzý velkých dat.
+                Data jsou ukládána po řádcích rozdělené ve sloupcových
+                rodinách. Databáze lze škálovat na stovky uzlů.\\
+        \hline
+        Grafové (NoSQL)
+            &   \parbox[t]{\textwidth}{Neo4j,\\ Amazon\\ Neptune}
+            &   Tyto databáze data modelují jako uzly a hrany s atributy.
+                Jsou ideální pro úlohy se složitými vztahy (doporučovací
+                systémy či sociální sítě). Nejdůležitější grafovou
+                databází je Neo4j
+                \cite{YHVfLHsNlUItkF6G,gT0jW3Rz4pdfcjnO}. %Ref: GPT/DBEngines
+                Grafové databáze jsou všeobecně méně obvyklé, jak
+                značí jejich nižší podíl na trhu.\\
+        \hline
+    \end{tabular}
+\end{table}
+
+\newpage
 
 \section{API}
+\label{sec:research-api}
 
-% TODO: Doplnění informací od API (REST/SOAP/GraphQL)
+Klasickým přístupem pro webová rozhraní (API) byl SOAP, který byl protokolem
+založeným na XML s WSDL kontraktem. SOAP je robustní, jazykově a platformově
+nezávislý a obsahuje zabudované bezpečnostní rozšíření \emph{WS-Security},
+díky čemuž se často používal v ekonomických odvětvích, např. bankovnictví
+nebo korporátní integrace. Díky využití formátu XML je však velmi náročný
+na šířku pásma, neboť XML zprávy obsahují spoustu metaúdajů.
+\cite{YHVfLHsNlUItkF6G,Sj7FFY7SXnJ6m41T} %Ref: GPT/Altex
+
+Od přelomu tisíciletí se novým standardem pro webová API stal REST, který
+definoval soubor architektonických zásad, jako např. klient-server, stateless,
+jednotné rozhraní, caching apod. REST API data v praxi vystavují jako zdroje
+na unikátních URL a používají běžně užívané standardní HTTP metody (GET, POST,
+PUT a DELETE). Díky své jednoduchosti a kompatibilitě se současným webem
+je REST velmi populární. Odpovědi jsou obvykle ve formátu JSON, který je méně
+datově náročný než XML, a umožňují cache na úrovni HTTP. Výhody RESTu obvykle
+spočívají ve volném spárování klienta a serveru, kdy je lze vyvíjet nezávisle
+na sobě, a v možnostech využití infrastruktury HTTP (zejména caching,
+autentizace a load balancing). Mezi nevýhodami jsou nejednoznačná struktura,
+neboť neexistuje univerzální šablona určená k modelování zdrojů a konkrétní
+implementace záleží na návrhu, a problém s nadbytečností či nedostatkem dat
+(klient někdy dostane buď příliš mnoho nebo příliš málo informace,
+což může vést k dodatečným požadavkům nebo objemnému množství dat).
+\cite{YHVfLHsNlUItkF6G,Sj7FFY7SXnJ6m41T} %Ref: GPT/Altex
+
+V roce 2015 Facebook představil GraphQL, dotazovací jazyk a runtime pro API
+umožňující klientovi specifikovat přesně data, která požaduje. Místo různých
+statických endpointů využívá jednoho univerzálního HTTP endpointu, kam klient
+posílá dotaz, ve kterém definuje strukturu požadované odpovědi. GraphQL
+používá typové schéma a umožňuje např. i realtime subskripce. Primární výhodou
+je optimalizace množství dat: klient dostane jen to, co potřebuje a v jednom
+volání může získat složitě propojená data (např. položku s jejími komentáři)
+\cite{YHVfLHsNlUItkF6G,Sj7FFY7SXnJ6m41T}. %Ref: GPT/Altex
+K tomu má GraphQL navíc vestavěný mechanismus verzování, kdy se mění schéma,
+ale klienti stále mohou pracovat s jedním endpointem.
+Nevýhody spočívají v komplexnosti implementace
+\cite{YHVfLHsNlUItkF6G,Sj7FFY7SXnJ6m41T}. %Ref: GPT/Altex
+Velké a složité dotazy mohou server přetížit a na rozdíl od čistého RESTu
+GraphQL nevyužívá out-of-the-box HTTP caching, díky čemuž musí aplikace cache
+budovat vlastní \cite{YHVfLHsNlUItkF6G,Sj7FFY7SXnJ6m41T}. %Ref: GPT/Altex
+Též vyžaduje uvést podrobné schéma v SDL a naučit se novou syntaxi,
+což zpravidla zvyšuje náklady na vývoj. GraphQL je navzdory tomu populární
+pro mobilní a komplexní frontendy, kde ho úspěšně nasazují firmy jako Meta,
+GitHub či Shopify.
+
+\newpage
+
+K řešení API tedy lze využít různé vzory. SOAP se v dnešní době využívá
+hlavně ve starších systémech, kde jsou požadavky na formální kontrakt
+a vysokou úroveň zabezpečení, a REST či JSON zůstává dominantní pro většinu
+veřejných i interních webových služeb díky využití jednoduchého HTTP modelu
+a široké podpoře. GraphQL je relativně nový formát, který je vhodný tam,
+kde klienti potřebují maximální flexibilitu dotazů a konsolidaci dat
+z více různých zdrojů, čímž ale také přináší složitější architekturu. Volba
+tedy závisí na konkrétním případě: kupříkladu \emph{„REST vyhovuje
+pro jednoduché CRUD API s mnoha uživateli“}, zatímco \emph{„GraphQL se hodí
+pro mobilní aplikaci, která má různá data přizpůsobená na míru“}
+\cite{YHVfLHsNlUItkF6G,Sj7FFY7SXnJ6m41T}. %Ref: GPT/Altex
 
 \section{Webové crawlery}
+\label{sec:research-crawlers}
 
-% TODO: Doplnění informací o webových crawlerech
+Pod pojmem \emph{webový crawler} (též označovaný jako spider nebo scraper)
+si lze představit program či framework, který prochází webové stránky
+a stahuje jejich obsah, často za účelem indexace nebo extrakce dat.
+Při návrhu crawleru se obvykle rozlišuje, zda stránka vyžaduje pouze
+statickž HTTP přenos, nebo ke svému fungování potřebuje i JavaScript.
+
+Tradiční crawlovací skripty (v Pythnu, Javě apod.) využívají různé knihovny,
+jako např. \emph{BeautifulSoup}, která funguje jako jednoduchý HTML parser,
+\emph{Requests}, která umožňuje stahování obsahu, nebo \emph{java.net}. Tyto
+knihovny fungují pro statické webové stránky. Postupně se pro crawlery
+na této bázi vyvinuly rámce jako \emph{Apache Nutch}, který je psaný v Javě,
+je škálovatelný, a používají ho vyhledávače, nebo specializované knihovny
+pro některé programovací jazyky. Crawler na této bázi typicky respektuje
+soubor \texttt{robots.txt}, který určuje, které cesty smí crawler procházet
+a které nikoliv \cite{YHVfLHsNlUItkF6G,adi8S69Mmo0Mi7FC}, %Ref: GPT/GoogleDev
+a řídí rychlost požadavků, aby jimi nezahltil webový provoz.
+
+S rostoucím množstvím stránek s dynamickým obsahem díky použití JavaScriptu
+se začaly objevovat frameworky a knihovny používající headless prohlížeče
+a nástroje pro automatizaci, čímž položily základy pro moderní technologie.
+Mezi tyto nástroje patří:
+
+\begin{itemize}
+    \item \textbf{Selenium:} Jedná se o knihovnu pro ovládání skutečného
+        prohlížeče, kterým může být např. Chrome, Firefox apod. Tato knihovna
+        umožňuje programovat klikáí, vyplňování formuláře a čekat na spuštění
+        JS kódu. Výhodou je, že stránku interpretuje podobně jako uživatel,
+        takže zvládne i složité interakce. Nevýhodou je výrazně pomalejší
+        běh, neboť se spouští reálný prohlížeč s celou renderovací smyčkou,
+        a vyšší spotřeba paměti a výpočetního výkonu. Selenium je k dispozici
+        ve více programovacích jazycích (např. Python, Java, C\#, JavaScript
+        aj.) a používá se spíše pro menší objemy dat či tam, kde je potřeba
+        interaktivita (např. vyplnění přihlašovacích formulářů). Dle odborné
+        analýzy je Selenium \emph{„relativně pomalé a náročné na zdroje“}
+        a nevhodné pro masivní scraping bez paralelizace.
+        \cite{YHVfLHsNlUItkF6G,XDjScR8U0lQdUngn} %Ref: GPT/WebScapingAPI
+    \item \textbf{Scrapy:} V Pythonu napsaný asynchronní rámec, který
+        je zaměřený přímo na vysokovýkonné stahování webu. Scrapy obsahuje
+        vlastní plánovač, správu fronty požadavků, parsování pomocí XPath
+        nebo CSS selektorů a pipeline pro zpracování dat. K velmi rychlému
+        stahování statických stránek využívá automatické škálování
+        a paralelní vykonávání. Nevýhodou je absence podpory JavaScriptu.
+        Pokud stránka obsahuje dynamicky generovaný obsah, který se načítá až
+        po načtení stránky, je nutné obsah předzpracovat. K tomu je možné
+        využít např. Selenium nebo Splash. Scrapy je tedy obvykle ideální
+        pro crawling statických stránek nebo stránek generovaných ve statické
+        formě (např. sběr produktů, odkazů či textu).
+        \cite{YHVfLHsNlUItkF6G,XDjScR8U0lQdUngn} %Ref: GPT/WebScapingAPI
+    \item \textbf{Puppeteer:} Knihovna určená pro Noje.js, která automatizuje
+        headless Chrome či Chromium prohlížeč. Oproti knihovně Selenium
+        nabízí rychlejší a vyšší úroveň ovládání, neboť je speciálně
+        optimalizovaná pro Chrome. Puppeteer kromě scrapingu umožňuje také
+        generování PDF, screenshotů apod. Výhodou je velmi přesný render
+        moderních webů zahrnující také React či Vue aplikace. Nevýhodou
+        se podobá knihovně Selenium, neboť je náročná na systémové zdroje.
+        Pupeteer je \emph{„podstatně rychlejší než Selenium“}, které
+        je komplexnější a multiplatformní, čímž si získává vysokou
+        výkonnostní příčku. Běží-li projekt výhradně na prohlížeči Chrome,
+        Puppeteer bývá zpravidla doporučenou volbou, díky vysoké rychlosti
+        a jednoduché API. \cite{YHVfLHsNlUItkF6G,KVcwMBKpAmczm8Mo}
+        %Ref: GPT/Oxylabs
+\end{itemize}
+
+Výběr nástrojů závisí na potřebách. Je nutné zhodnotit výhody a nevýhody
+jednotlivých knihoven a nástrojů a rozhodnout se na základě nabízených
+funkcí. Kromě předešlých moderních nástrojů může být další možností
+\emph{Playwright}, který je konkurentem Puppeteeru a podporuje i jiné
+prohlížeče, z těch tradičních např. \emph{BeautifulSoup/Jsoup}, který
+se hodí pro jednoduché parsování HTML, případně specializované služby,
+neboli servery s API optimalizovanou pro scraping.
+
+Na začátek se doporučuje použít jednoduché nástroje (Scrapy pro klasický
+crawling) a podle potřeb rozšířit sadu nástrojů o ty typu Selenium nebo
+Puppeteer pro stránky vyžadující interakci. V každém případě je však
+důležité dodržovat etiketu: respektovat \texttt{robots.txt}
+\cite{YHVfLHsNlUItkF6G,adi8S69Mmo0Mi7FC} %Ref: GPT/GoogleDev
+a šetřit síťovou kapacitu cílů přidáním prodlevy mezi požadavky.
+
+Crawlery lze použít k různým účelům: k indexaci stránek pro vyhledávače,
+sběru dat (market iltelligence či \textbf{agregace cen}) nebo analýze obsahu.
+V moderních výzkumech lze vidět, že spojením více API (např. GraphQL)
+a webových crawlerů je možné vytvářet sofistikované služby, skrze které
+mohou \emph{„klienti získávat data z různých databází a zdrojů přes
+jediné API“} \cite{YHVfLHsNlUItkF6G,Sj7FFY7SXnJ6m41T}. %Ref: GPT/Altex
+Konečný výběr technologií závisí především na povaze cílového webu (jedná se
+o statický či dynamický web, jak velký je objem dat, případně jaké jsou
+požadavky na interaktivitu) a také na požadavcích samotného projektu.
 
 \endinput

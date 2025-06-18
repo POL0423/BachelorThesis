@@ -9,6 +9,9 @@
 \usepackage[sql,php,html,js,css]{diplomalst}
 \usepackage{amssymb} % for \checkmark
 \usepackage{amsmath}
+\usepackage{makecell}
+
+\renewcommand\theadfont{\normalsize}
 
 % Zadame pozadovane vstupy pro generovani titulnich stran.
 \ThesisAuthor{Marek Poláček}
@@ -24,59 +27,85 @@
 \ThesisAssignmentFileName{ThesisSpecification_POL0423_vsboee24030DA7.pdf}
 
 % Pokud nechceme nikomu dekovat makro zapoznamkujeme.
-\Acknowledgement{Rád bych na tomto místě poděkoval kamarádům a vedoucímu
+\Acknowledgement{Rád bych na tomto místě poděkoval všem kamarádům a vedoucímu
 práce, kteří mi s prací pomohli, protože bez nich by tato práce nevznikla.}
 
 \CzechAbstract{
-    TODO: Doplnit zhodnocení práce
+    V~této bakalářské práci se~věnuji návrhu a~implementaci webové aplikace
+    pro~porovnávání cen pohonných hmot na~internetu. Práci začínám popisem
+    motivace k~tvorbě tohoto projektu společně s~přehledem podobných projektů,
+    dále pokračuji rozborem technologií používaných pro~návrh a~implementaci
+    webových aplikací s~podrobným porovnáním jednotlivých knihoven
+    a~frameworků, zhodnocením jejich výhod a~nevýhod a~určením jejich
+    optimálních aplikací, následně řeším technický návrh struktury této
+    konkrétní webové aplikace, přípravu prostředí a~samotnou implementaci
+    a~vývoj aplikace a~práci zakončuji zhodnocením projektu.
 }
 
-\CzechKeywords{aplikace; pohonné hmoty; srovnávač cen; \LaTeX; bakalářská práce}
+\CzechKeywords{webová aplikace; pohonné hmoty; srovnávač cen;
+    \LaTeX; bakalářská práce}
 
 \EnglishAbstract{
-    TODO: Fill in assignment conclusion
+    In~this Bachelor Thesis, I~cover the~design and~implementation
+    of~the~web application for~fuel comparisons on~the~Internet. I~open
+    this thesis by~exploring the~motivations behind the~creation of~such
+    project, together with the~overview of~similar apps and~projects.
+    Next I~cover the~research of~the~technologies used for designing
+    and~implementation of~the~web applications with detailed comparison
+    between each library and~frameworks, assessing their pros and~cons,
+    and~determining their optimal usage. Thesis is~then used to~describe 
+    technical structure design of~this particular web application,
+    preparation of~the~environment, and~the~actual implementation. Finally,
+    I~close~up this thesis by~the~project conclusion.
 }
 
-\EnglishKeywords{application; fuel; price comparison; \LaTeX; bachelor thesis}
+\EnglishKeywords{web application; fuel; price comparison;
+    \LaTeX; bachelor thesis}
 
-\AddAcronym{PHM}{Pohonné hmoty}
-\AddAcronym{ČS}{Čerpací stanice}
-\AddAcronym{Kč}{Koruna česká}
-\AddAcronym{ČR}{Česká republika}
-\AddAcronym{PC}{Personal Computer}
-\AddAcronym{GPS}{Global Positioning System}
-\AddAcronym{HTML}{Hyper Text Markup Language}
-\AddAcronym{CSS}{Cascade Style Sheet}
-\AddAcronym{SQL}{Structured Query Language}
-\AddAcronym{PHP}{Hyper Text Preprocessor}
-\AddAcronym{SQL}{Structured Query Language}
-\AddAcronym{JS}{JavaScript}
-\AddAcronym{TS}{TypeScript}
-\AddAcronym{DOM}{Document Object Model}
-\AddAcronym{SPA}{Single Page Application}
-\AddAcronym{PWA}{Progressive Web App}
-\AddAcronym{SSR}{Solid State Relay}
-\AddAcronym{SSG}{Special Services Group}
-\AddAcronym{SEO}{Search Engine Optimization}
-\AddAcronym{REST}{Representational State Transfer}
-\AddAcronym{SOAP}{Simple Object Access Protocol}
-\AddAcronym{ORM}{Object Relational Mapping}
+\AddAcronym{ACID}{Atomicity, Consistency, Isolation, Durability}
+\AddAcronym{API}{Application Interface}
+\AddAcronym{ASCII}{American Standard Code for Information Interchange}
 \AddAcronym{CLR}{Common Language Runtime}
 \AddAcronym{CMS}{Content Management System}
-\AddAcronym{RDBMS}{Relational Database Management System}
-\AddAcronym{JVM}{Java Virtual Machine}
-\AddAcronym{ASCII}{American Standard Code for Information Interchange}
-\AddAcronym{VŠB-TUO}{Vysoká škola báňská – Technická univerzita Ostrava}
-\AddAcronym{RHEL}{Red Hat Enterprise Linux}
+\AddAcronym{CRUD}{Create, Read, Update, Delete}
+\AddAcronym{CSS}{Cascade Style Sheet}
+\AddAcronym{ČOI}{Česká obchodní inspekce}
+\AddAcronym{ČR}{Česká republika}
+\AddAcronym{ČS}{Čerpací stanice}
 \AddAcronym{DNS}{Domain Name System}
-\AddAcronym{VM}{Virtual Machine}
+\AddAcronym{DOM}{Document Object Model}
+\AddAcronym{GPS}{Global Positioning System}
+\AddAcronym{GUI}{Graphical User Interface}
+\AddAcronym{HTML}{Hyper Text Markup Language}
 \AddAcronym{IP}{Internet Protocol}
-\AddAcronym{TCP}{Transmission Control Protocol}
+\AddAcronym{JS}{JavaScript}
+\AddAcronym{JSON}{JavaScript Object Notation}
+\AddAcronym{JVM}{Java Virtual Machine}
+\AddAcronym{Kč}{Koruna česká}
+\AddAcronym{OCR}{Optical Character Recognition}
+\AddAcronym{ORM}{Object Relational Mapping}
 \AddAcronym{OS}{Operační systém}
 \AddAcronym{OSM}{OpenStreetMap}
-\AddAcronym{GUI}{Graphical User Interface}
-\AddAcronym{OCR}{Optical Character Recognition}
-\AddAcronym{API}{Application Interface}
+\AddAcronym{PC}{Personal Computer}
+\AddAcronym{PHM}{Pohonné hmoty}
+\AddAcronym{PHP}{Hyper Text Preprocessor}
+\AddAcronym{PWA}{Progressive Web App}
+\AddAcronym{RDBMS}{Relational Database Management System}
+\AddAcronym{REST}{Representational State Transfer}
+\AddAcronym{RHEL}{Red Hat Enterprise Linux}
+\AddAcronym{SDL}{Specification and Description Language}
+\AddAcronym{SEO}{Search Engine Optimization}
+\AddAcronym{SOAP}{Simple Object Access Protocol}
+\AddAcronym{SPA}{Single Page Application}
+\AddAcronym{SQL}{Structured Query Language}
+\AddAcronym{SSG}{Special Services Group}
+\AddAcronym{SSR}{Solid State Relay}
+\AddAcronym{SW}{Software}
+\AddAcronym{TS}{TypeScript}
+\AddAcronym{VM}{Virtual Machine}
+\AddAcronym{VŠB-TUO}{Vysoká škola báňská – Technická univerzita Ostrava}
+\AddAcronym{WSDL}{Web Services Description Language}
+\AddAcronym{XML}{Extensible Markup Language}
 
 \addbibresource{resources.bib}      % Jediné skutečné knižní prameny
 
