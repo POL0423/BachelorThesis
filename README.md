@@ -7,6 +7,9 @@ vypracovávána v českém jazyce.
 
 ## Odkazy na zdroje
 
+- CERI, Stefano; BOZZON, Alessandro; BRAMBILLA, Marco; VALLE, Emanuele Della; FRATERNALI, Piero et al. *Web information retrieval*. Data-centric systems and applications. Heidelberg: Springer, 2013. ISBN 978-3-642-39313-6.
+- UPADHYAYA, Nitesh. *Advanced front-end development: Building scalable and high-performance web applications with react*. 2025. ISBN 979-886881317-7.
+- NAIK, Poornima G. a OZA, Kavita S. Design and Development of Multithreaded Web Crawler for Efficient Extraction of Research Data. In: *Advances in Cognitive Science and Communications*. Cognitive Science and Technology. Singapore: Springer Nature Singapore, 2023, s. 581-589. ISBN 978-981-19-8085-5. Dostupné z: https://doi.org/10.1007/978-981-19-8086-2_56.
 - GADE, Kenneth. A Non-singular Horizontal Position Representation.
     In: *Journal of Navigation*. 2010, s. 395-417. ISSN 0373-4633.
     Dostupné z: https://doi.org/10.1017/S0373463309990415.

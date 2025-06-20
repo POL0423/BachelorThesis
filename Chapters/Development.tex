@@ -46,6 +46,10 @@ zejména o~provozní kapaliny sloužící k~bezpečnému a~ekologickému provozu
 automobilu, jako např. AdBlue (syntetická močovina) nebo kapalina
 do~ostřikovačů.
 
+Zdrojový kód této části se~nachází v~datové příloze a~aktuální verze
+je~k~dispozici v~GitHub repozitáři
+\texttt{https://githubcom/POL0423/petrolscan-crawler}.
+
 \subsection{Procházení Globusu}
 \label{sec:crawling-globus}
 
@@ -92,7 +96,7 @@ přidružené CSS selektory, které má~crawler zohlednit.
         Následující sekvence popisuje proceduru pro~jednu lokalitu (tato
         procedura se~opakuje do~poslední lokality, opakovaná sekvence
         je~uzavřena mezi horizontální čáry).
-        \clearpage  \hrule
+        \medskip  \hrule
     \item Pro~každou prodejnu se~nyní vytváří nový prohlížeč. V~tomto
         prohlížeči se~znovu načítá webová stránka Globusu. Opět
         se~odsouhlasí cookies. Pokud není dialog s~cookies k~dispozici,
@@ -155,13 +159,13 @@ přidružené CSS selektory, které má~crawler zohlednit.
         Tento objekt je~vkládán do~pole obsahující všechny prodejny. Pokud
         při~zpracování lokality dojde k~chybě, crawler pořídí ladící screenshot
         a~lokalitu přeskakuje.
-        \hrule
+        \medskip    \hrule  \medskip
         Zde je~konec opakované procedury. Nasbíraná data si~crawler uloží
         do~svého datasetu a~pokračuje dále.
         
         Následující sekvence popisuje nový cyklus, ohraničený novými
         horizontálními čarami.
-        \hrule
+        \medskip    \hrule
     \item Pro každou lokaci s~nasbíranými daty následně crawler vyhledá GPS
         souřadnice ČS u~dané prodejny. K~tomu jsem si~vybral API \emph{OSM
         Nominatim}, které~je zdarma a~open-source. API má~rate limit, tudíž
@@ -199,7 +203,7 @@ přidružené CSS selektory, které má~crawler zohlednit.
         kontroluje jejich přítomnost a~zda nedošlo k~jejich aktualizaci
         od~posledního zápisu. Tato knihovna používá speciálně navržený formát
         dat, který je~popsán dále.
-        \hrule
+        \medskip    \hrule
     \item Zde je~konec procedury. Posledním krokem je~ukončení procesu.
 \end{enumerate}
 
@@ -241,7 +245,7 @@ crawler.
         Následující sekvence (ohraničená horizontálními čarami) obsahuje
         proceduru extrakce dat z~dílčích stránek jednotlivých ČS. Tato
         sekvence se~opakuje do~vyčerpání všech lokalit.
-        \hrule
+        \medskip    \hrule
     \item Pro~každou stránku jednotlivých ČS vytváříme nový prohlížeč.
         Pokud z~jakéhokoliv důvodu vytvoření prohlížeče selže, lokalita
         je~přeskočena a~do~konzole je~vypsána chyba.
@@ -326,7 +330,7 @@ crawler.
     \item Jako poslední bod této sekvence je poskládání informací o~palivech
         společně s~údaji o~lokalitě do~společného objektu, který se~následně
         vkládá do~pole obsahující všechny ČS této sítě.
-        \hrule
+        \medskip    \hrule
     \item Toto je~konec předchozí cyklické sekvence. Následně data uložíme
         do~datasetu crawleru a~pokračujeme dále na~zápis do~databáze.
         Postup zápisu do~databáze je~fundamentálně shodný s~postupem
@@ -379,6 +383,10 @@ zpracovaná pošle uživateli. Výhodou této formy rozdělení úkonů aplikace
 prostě kontaktuje databázi přímo, aniž by~došlo k~úniku autentizačních
 údajů na~stranu uživatelskou, a~uživatel i~přesto dostane data zpracovaná
 dle~jeho požadavků.
+
+Zdrojový kód této části je~v~datové příloze a~aktuální verze kódu
+je~k~dispozici v~GitHub repozitáři
+\texttt{http://github.com/POL0423/petrolscan-web-app}.
 
 \subsection{Vytvoření projektu}
 
@@ -550,8 +558,9 @@ Výsledkem těchto výpočtů je~vzdálenost mezi dvěma body na~Zemi v~kilometr
 
 Posledním krokem je~kontejnerizace těchto dílčích služeb. V~listingu
 \ref{src:docker-compose.yml} na~stránce \pageref{src:docker-compose.yml}
-lze vidět soubor \texttt{docker\_compose.yml}, který je jinak dostupný
-také v repozitáři\\
+lze vidět soubor \texttt{docker\_compose.yml}, který je~jinak dostupný
+také v~datové příloze včetně dodatkových souborů a~aktuální verze
+je~v~repozitáři\\
 \texttt{https://github.com/POL0423/petrolscan-docker-compose}.
 
 Během testování v~Docker kontejnerech jsem musel udělat některé malé
