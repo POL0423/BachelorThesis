@@ -348,12 +348,12 @@ crawler.
 Jelikož databáze je~strukturovaná pomocí tabulky, údaje o~ČS se~opakují
 pro~každé nabízené palivo a~dodatkové produkty z~tankovacích stojanů.
 JSON formát těchto dat, jak je~přijímá logovací knihovna pro~databázi,
-je~k~dispozici v~listingu \ref{lst:dbdata-json}
-na~straně \pageref{lst:dbdata-json}. Formát je~zkrácen na~příklad
+je~k~dispozici v~listingu \ref{lst:dbdata-json}. Formát je~zkrácen na~příklad
 a~komentáře, plný popis tohoto formátu je~ve~zdrojovém kódu v~datové příloze
 a~v~GitHub repozitáři. Datová struktura MySQL tabulky je vidět
 v~tabulce~\ref{tab:petrolscan_data-structure}
 na~straně~\pageref{tab:petrolscan_data-structure}.
+\bigskip
 
 \begin{lstlisting}[caption={JSON formát dat pro logovací knihovnu},label=lst:dbdata-json]
 {
@@ -468,6 +468,7 @@ data jsou strukturovaná do~tabulky, je~potřeba sdružit data paliv a~doplňkov
 produktů z~tankovacích stojanů do~společného datového objektu pro~každou ČS.
 MySQL od~verze 5.7.22 nabízí JSON funkce. Tato data jsou následně seřazena
 dle~ceny produktů vzestupně či~sestupně. Výchozí SQL dotaz vypadá následovně:
+\bigskip
 
 \begin{lstlisting}[label=lst:default-sql-query,caption={SQL dotaz srovnávače cen},language=sql]
 SELECT
@@ -560,7 +561,7 @@ Posledním krokem je~kontejnerizace těchto dílčích služeb. V~listingu
 \ref{src:docker-compose.yml} na~stránce \pageref{src:docker-compose.yml}
 lze vidět soubor \texttt{docker\_compose.yml}, který je~jinak dostupný
 také v~datové příloze včetně dodatkových souborů a~aktuální verze
-je~v~repozitáři\\
+je~v~repozitáři
 \texttt{https://github.com/POL0423/petrolscan-docker-compose}.
 
 Během testování v~Docker kontejnerech jsem musel udělat některé malé
