@@ -64,7 +64,13 @@ Součástí odevzdané BP je také datová příloha, která je přiložena
 v elektronickém systému ve formátu ZIP, tato datová příloha obsahuje veškerý
 zdrojový kód crawlerů, webového frontendu i definic Docker images k sestavení
 celého projektu v podobě při odevzdávání BP. Aktuální verzi najdete
-v těchto repozitářích. Tyto repozitáře budou udržovány aktuální do doby
+v těchto repozitářích:
+
+- https://github.com/POL0423/petrolscan-crawler
+- https://github.com/POL0423/petrolscan-docker-compose
+- https://github.com/POL0423/petrolscan-web-app
+
+Tyto repozitáře budou udržovány aktuální do doby
 obhajoby BP (duben až květen 2026), posléze budou archivovány, vývoj bude
 zastaven a server, který projekt hostuje, bude zrušen. Ze zdrojových kódů
 však lze nadále čerpat a je možné z nich vytvořit nové forky.
